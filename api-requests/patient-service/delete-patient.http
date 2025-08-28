@@ -1,0 +1,14 @@
+### GET request to example server
+DELETE http://localhost:4000/patients/123e4567-e89b-12d3-a456-426614174000
+Content-Type: application/json
+
+
+{
+  "name": "John Doe",
+  "email": "john.doe@examplee.com",
+  "address": "123 Main St, Springfield",
+  "dateOfBirth": "2000-09-28",
+  "registeredDate": "2025-08-24"
+}
+
+###
