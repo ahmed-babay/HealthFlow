@@ -11,6 +11,5 @@ import java.util.UUID;
 public interface PatientRepository extends JpaRepository<Patient, UUID> {
 
     boolean existsByEmail(String email);
-
-    UUID findIdByEmail(String email);
+    boolean existsByEmailAndIdNot(String email, UUID id);
 }

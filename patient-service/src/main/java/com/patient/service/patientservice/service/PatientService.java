@@ -7,6 +7,7 @@ import com.patient.service.patientservice.exception.PatientNotFoundException;
 import com.patient.service.patientservice.mapper.PatientMapper;
 import com.patient.service.patientservice.model.Patient;
 import com.patient.service.patientservice.repository.PatientRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,6 +18,7 @@ import java.util.UUID;
 public class PatientService {
     private final PatientRepository patientRepository;
 
+    @Autowired
     public PatientService(PatientRepository patientRepository) {
         this.patientRepository = patientRepository;
     }
@@ -37,7 +39,11 @@ public class PatientService {
     }
 
     public PatientResponseDTO updatePatient(UUID id, PatientRequestDTO patientRequestDTO){
-        Patient patient = patientRepository.findById(id).orElseThrow(()-> new PatientNotFoundException("Patient not found with ID: "+id));
+        Patient patient = patientRepository.findById(id).orElseThrow(()-> new PatientNotFoundException("Patient not found with ID: "+ id));
+
+        if (patientRepository.existsByEmailAndIdNot(patientRequestDTO.getEmail(), id))
+            throw new EmailAlreadyExistsException("Patient with this Email" + "already exists"+ patientRequestDTO.getEmail());
+
         patient.setName(patientRequestDTO.getName());
         patient.setEmail(patientRequestDTO.getEmail());
         patient.setAddress(patientRequestDTO.getAddress());
