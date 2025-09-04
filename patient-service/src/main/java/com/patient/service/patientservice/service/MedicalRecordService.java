@@ -2,6 +2,7 @@ package com.patient.service.patientservice.service;
 
 import com.patient.service.patientservice.dto.MedicalRecordRequestDTO;
 import com.patient.service.patientservice.dto.MedicalRecordResponseDTO;
+import com.patient.service.patientservice.exception.MedicalRecordNotFoundException;
 import com.patient.service.patientservice.exception.PatientNotFoundException;
 import com.patient.service.patientservice.mapper.MedicalRecordMapper;
 import com.patient.service.patientservice.model.MedicalRecord;
@@ -48,7 +49,7 @@ public class MedicalRecordService {
 
     public MedicalRecordResponseDTO getMedicalRecordById(UUID id) {
         MedicalRecord medicalRecord = medicalRecordRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Medical record not found with ID: " + id));
+                .orElseThrow(() -> new MedicalRecordNotFoundException("Medical record not found with ID: " + id));
         return MedicalRecordMapper.toDTO(medicalRecord);
     }
 
@@ -64,7 +65,7 @@ public class MedicalRecordService {
 
     public MedicalRecordResponseDTO updateMedicalRecord(UUID id, MedicalRecordRequestDTO requestDTO) {
         MedicalRecord existingRecord = medicalRecordRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Medical record not found with ID: " + id));
+                .orElseThrow(() -> new MedicalRecordNotFoundException("Medical record not found with ID: " + id));
 
         MedicalRecordMapper.updateModel(existingRecord, requestDTO);
         MedicalRecord updatedRecord = medicalRecordRepository.save(existingRecord);
@@ -73,7 +74,7 @@ public class MedicalRecordService {
 
     public void deleteMedicalRecord(UUID id) {
         MedicalRecord medicalRecord = medicalRecordRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Medical record not found with ID: " + id));
+                .orElseThrow(() -> new MedicalRecordNotFoundException("Medical record not found with ID: " + id));
         
         medicalRecordRepository.delete(medicalRecord);
         System.out.println("Deleted Medical Record with ID: " + id);
