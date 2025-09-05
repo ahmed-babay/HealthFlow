@@ -4,8 +4,11 @@ import com.patient.service.patientservice.dto.DiagnosisRequestDTO;
 import com.patient.service.patientservice.dto.DiagnosisResponseDTO;
 import com.patient.service.patientservice.dto.MedicalRecordRequestDTO;
 import com.patient.service.patientservice.dto.MedicalRecordResponseDTO;
+import com.patient.service.patientservice.dto.PrescriptionRequestDTO;
+import com.patient.service.patientservice.dto.PrescriptionResponseDTO;
 import com.patient.service.patientservice.service.DiagnosisService;
 import com.patient.service.patientservice.service.MedicalRecordService;
+import com.patient.service.patientservice.service.PrescriptionService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +22,14 @@ public class MedicalRecordController {
 
     private final MedicalRecordService medicalRecordService;
     private final DiagnosisService diagnosisService;
+    private final PrescriptionService prescriptionService;
 
-    public MedicalRecordController(MedicalRecordService medicalRecordService, DiagnosisService diagnosisService) {
+    public MedicalRecordController(MedicalRecordService medicalRecordService, 
+                                  DiagnosisService diagnosisService,
+                                  PrescriptionService prescriptionService) {
         this.medicalRecordService = medicalRecordService;
         this.diagnosisService = diagnosisService;
+        this.prescriptionService = prescriptionService;
     }
 
     @GetMapping
@@ -93,6 +100,40 @@ public class MedicalRecordController {
     @DeleteMapping("/{recordId}/diagnoses/{diagnosisId}")
     public ResponseEntity<Void> deleteDiagnosis(@PathVariable UUID recordId, @PathVariable UUID diagnosisId) {
         diagnosisService.deleteDiagnosis(recordId, diagnosisId);
+        return ResponseEntity.ok().build();
+    }
+
+    // Nested Prescription endpoints
+    @GetMapping("/{id}/prescriptions")
+    public ResponseEntity<List<PrescriptionResponseDTO>> getPrescriptionsByMedicalRecord(@PathVariable UUID id) {
+        List<PrescriptionResponseDTO> prescriptions = prescriptionService.getPrescriptionsByMedicalRecord(id);
+        return ResponseEntity.ok().body(prescriptions);
+    }
+
+    @GetMapping("/{id}/prescriptions/active")
+    public ResponseEntity<List<PrescriptionResponseDTO>> getActivePrescriptionsByMedicalRecord(@PathVariable UUID id) {
+        List<PrescriptionResponseDTO> prescriptions = prescriptionService.getActivePrescriptionsByMedicalRecord(id);
+        return ResponseEntity.ok().body(prescriptions);
+    }
+
+    @PostMapping("/{id}/prescriptions")
+    public ResponseEntity<PrescriptionResponseDTO> createPrescription(@PathVariable UUID id, 
+                                                                     @Valid @RequestBody PrescriptionRequestDTO requestDTO) {
+        PrescriptionResponseDTO prescription = prescriptionService.createPrescription(id, requestDTO);
+        return ResponseEntity.ok().body(prescription);
+    }
+
+    @PutMapping("/{recordId}/prescriptions/{prescriptionId}")
+    public ResponseEntity<PrescriptionResponseDTO> updatePrescription(@PathVariable UUID recordId,
+                                                                     @PathVariable UUID prescriptionId,
+                                                                     @Valid @RequestBody PrescriptionRequestDTO requestDTO) {
+        PrescriptionResponseDTO prescription = prescriptionService.updatePrescription(recordId, prescriptionId, requestDTO);
+        return ResponseEntity.ok().body(prescription);
+    }
+
+    @DeleteMapping("/{recordId}/prescriptions/{prescriptionId}")
+    public ResponseEntity<Void> deletePrescription(@PathVariable UUID recordId, @PathVariable UUID prescriptionId) {
+        prescriptionService.deletePrescription(recordId, prescriptionId);
         return ResponseEntity.ok().build();
     }
 }
