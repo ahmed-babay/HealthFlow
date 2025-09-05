@@ -1,0 +1,15 @@
+### POST request to create medical record
+POST http://localhost:8080/medical-records
+Content-Type: application/json
+
+{
+  "patientId": "{{patient_id}}",
+  "chiefComplaint": "Patient experiencing chest pain and shortness of breath",
+  "symptoms": "Chest tightness, difficulty breathing, mild fatigue, occasional dizziness",
+  "examinationNotes": "Heart rate: 95 bpm, Blood pressure: 140/90, Temperature: 36.8°C. Chest examination reveals clear lung sounds, regular heart rhythm",
+  "treatmentPlan": "ECG ordered, blood tests for cardiac enzymes, prescribe aspirin 81mg daily, follow-up in 1 week",
+  "doctorNotes": "Patient appears anxious but cooperative. Family history of cardiac disease noted. Recommend lifestyle modifications",
+  "attendingDoctor": "Dr. Sarah Johnson"
+}
+
+###

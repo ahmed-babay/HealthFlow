@@ -1,0 +1,15 @@
+### PUT request to update medical record
+PUT http://localhost:8080/medical-records/{{medical_record_id}}
+Content-Type: application/json
+
+{
+  "patientId": "{{patient_id}}",
+  "chiefComplaint": "Follow-up visit for chest pain - symptoms improved",
+  "symptoms": "Mild chest discomfort only with exertion, breathing improved significantly",
+  "examinationNotes": "Heart rate: 78 bpm, Blood pressure: 125/80, Temperature: 36.5°C. Chest examination normal, heart sounds regular",
+  "treatmentPlan": "Continue aspirin therapy, cardiac rehabilitation program recommended, dietary consultation scheduled",
+  "doctorNotes": "Patient responding well to treatment. ECG results normal. Continue current management plan",
+  "attendingDoctor": "Dr. Sarah Johnson"
+}
+
+###

@@ -1,0 +1,4 @@
+### DELETE medical record
+DELETE http://localhost:8080/medical-records/{{medical_record_id}}
+
+###
