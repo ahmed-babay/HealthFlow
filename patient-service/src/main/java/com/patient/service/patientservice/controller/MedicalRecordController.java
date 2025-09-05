@@ -1,7 +1,10 @@
 package com.patient.service.patientservice.controller;
 
+import com.patient.service.patientservice.dto.DiagnosisRequestDTO;
+import com.patient.service.patientservice.dto.DiagnosisResponseDTO;
 import com.patient.service.patientservice.dto.MedicalRecordRequestDTO;
 import com.patient.service.patientservice.dto.MedicalRecordResponseDTO;
+import com.patient.service.patientservice.service.DiagnosisService;
 import com.patient.service.patientservice.service.MedicalRecordService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +18,11 @@ import java.util.UUID;
 public class MedicalRecordController {
 
     private final MedicalRecordService medicalRecordService;
+    private final DiagnosisService diagnosisService;
 
-    public MedicalRecordController(MedicalRecordService medicalRecordService) {
+    public MedicalRecordController(MedicalRecordService medicalRecordService, DiagnosisService diagnosisService) {
         this.medicalRecordService = medicalRecordService;
+        this.diagnosisService = diagnosisService;
     }
 
     @GetMapping
@@ -60,6 +65,34 @@ public class MedicalRecordController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMedicalRecord(@PathVariable UUID id) {
         medicalRecordService.deleteMedicalRecord(id);
+        return ResponseEntity.ok().build();
+    }
+
+    // Nested Diagnosis endpoints
+    @GetMapping("/{id}/diagnoses")
+    public ResponseEntity<List<DiagnosisResponseDTO>> getDiagnosesByMedicalRecord(@PathVariable UUID id) {
+        List<DiagnosisResponseDTO> diagnoses = diagnosisService.getDiagnosesByMedicalRecord(id);
+        return ResponseEntity.ok().body(diagnoses);
+    }
+
+    @PostMapping("/{id}/diagnoses")
+    public ResponseEntity<DiagnosisResponseDTO> createDiagnosis(@PathVariable UUID id, 
+                                                               @Valid @RequestBody DiagnosisRequestDTO requestDTO) {
+        DiagnosisResponseDTO diagnosis = diagnosisService.createDiagnosis(id, requestDTO);
+        return ResponseEntity.ok().body(diagnosis);
+    }
+
+    @PutMapping("/{recordId}/diagnoses/{diagnosisId}")
+    public ResponseEntity<DiagnosisResponseDTO> updateDiagnosis(@PathVariable UUID recordId,
+                                                               @PathVariable UUID diagnosisId,
+                                                               @Valid @RequestBody DiagnosisRequestDTO requestDTO) {
+        DiagnosisResponseDTO diagnosis = diagnosisService.updateDiagnosis(recordId, diagnosisId, requestDTO);
+        return ResponseEntity.ok().body(diagnosis);
+    }
+
+    @DeleteMapping("/{recordId}/diagnoses/{diagnosisId}")
+    public ResponseEntity<Void> deleteDiagnosis(@PathVariable UUID recordId, @PathVariable UUID diagnosisId) {
+        diagnosisService.deleteDiagnosis(recordId, diagnosisId);
         return ResponseEntity.ok().build();
     }
 }
