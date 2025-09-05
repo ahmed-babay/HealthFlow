@@ -1,9 +1,9 @@
 ### POST request to create medical record
-POST http://localhost:8080/medical-records
+POST http://localhost:4000/medical-records
 Content-Type: application/json
 
 {
-  "patientId": "{{patient_id}}",
+  "patientId": "123e4567-e89b-12d3-a456-426614174000",
   "chiefComplaint": "Patient experiencing chest pain and shortness of breath",
   "symptoms": "Chest tightness, difficulty breathing, mild fatigue, occasional dizziness",
   "examinationNotes": "Heart rate: 95 bpm, Blood pressure: 140/90, Temperature: 36.8°C. Chest examination reveals clear lung sounds, regular heart rhythm",

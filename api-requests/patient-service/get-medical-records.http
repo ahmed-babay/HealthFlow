@@ -1,19 +1,19 @@
 ### GET all medical records
-GET http://localhost:8080/medical-records
+GET http://localhost:4000/medical-records
 
 ###
 
 ### GET medical record by ID
-GET http://localhost:8080/medical-records/{{medical_record_id}}
+GET http://localhost:4000/medical-records/{{medical_record_id}}
 
 ###
 
 ### GET medical records by patient ID
-GET http://localhost:8080/medical-records/patient/{{patient_id}}
+GET http://localhost:4000/medical-records/patient/{{patient_id}}
 
 ###
 
 ### GET medical record count by patient
-GET http://localhost:8080/medical-records/patient/{{patient_id}}/count
+GET http://localhost:4000/medical-records/patient/{{patient_id}}/count
 
 ###
