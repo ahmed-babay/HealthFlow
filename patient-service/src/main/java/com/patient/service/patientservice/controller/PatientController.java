@@ -1,10 +1,10 @@
 package com.patient.service.patientservice.controller;
 
+import com.patient.service.patientservice.dto.AllergyRequestDTO;
+import com.patient.service.patientservice.dto.AllergyResponseDTO;
 import com.patient.service.patientservice.dto.PatientRequestDTO;
 import com.patient.service.patientservice.dto.PatientResponseDTO;
-import com.patient.service.patientservice.mapper.PatientMapper;
-import com.patient.service.patientservice.model.Patient;
-import com.patient.service.patientservice.repository.PatientRepository;
+import com.patient.service.patientservice.service.AllergyService;
 import com.patient.service.patientservice.service.PatientService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +18,11 @@ import java.util.UUID;
 public class PatientController {
 
     private final PatientService patientService;
+    private final AllergyService allergyService;
 
-    public PatientController(PatientService patientService) {
+    public PatientController(PatientService patientService, AllergyService allergyService) {
         this.patientService = patientService;
+        this.allergyService = allergyService;
     }
 
     @GetMapping
@@ -44,6 +46,64 @@ public class PatientController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePatient(@PathVariable UUID id,@Valid PatientRequestDTO patientRequestDTO){
         patientService.deletePatient(id,patientRequestDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    // Patient Allergy endpoints
+    @GetMapping("/{id}/allergies")
+    public ResponseEntity<List<AllergyResponseDTO>> getAllergiesByPatient(@PathVariable UUID id) {
+        List<AllergyResponseDTO> allergies = allergyService.getAllergiesByPatientId(id);
+        return ResponseEntity.ok().body(allergies);
+    }
+
+    @GetMapping("/{id}/allergies/active")
+    public ResponseEntity<List<AllergyResponseDTO>> getActiveAllergiesByPatient(@PathVariable UUID id) {
+        List<AllergyResponseDTO> allergies = allergyService.getActiveAllergiesByPatientId(id);
+        return ResponseEntity.ok().body(allergies);
+    }
+
+    @GetMapping("/{id}/allergies/severe")
+    public ResponseEntity<List<AllergyResponseDTO>> getSevereAllergiesByPatient(@PathVariable UUID id) {
+        List<AllergyResponseDTO> allergies = allergyService.getSevereAllergiesByPatientId(id);
+        return ResponseEntity.ok().body(allergies);
+    }
+
+    @GetMapping("/{patientId}/allergies/{allergyId}")
+    public ResponseEntity<AllergyResponseDTO> getAllergyById(@PathVariable UUID patientId, @PathVariable UUID allergyId) {
+        AllergyResponseDTO allergy = allergyService.getAllergyById(patientId, allergyId);
+        return ResponseEntity.ok().body(allergy);
+    }
+
+    @GetMapping("/{id}/allergies/count")
+    public ResponseEntity<Long> getAllergyCountByPatient(@PathVariable UUID id) {
+        long count = allergyService.getAllergyCountByPatient(id);
+        return ResponseEntity.ok().body(count);
+    }
+
+    @GetMapping("/{id}/allergies/count/active")
+    public ResponseEntity<Long> getActiveAllergyCountByPatient(@PathVariable UUID id) {
+        long count = allergyService.getActiveAllergyCountByPatient(id);
+        return ResponseEntity.ok().body(count);
+    }
+
+    @PostMapping("/{id}/allergies")
+    public ResponseEntity<AllergyResponseDTO> createAllergy(@PathVariable UUID id, 
+                                                           @Valid @RequestBody AllergyRequestDTO requestDTO) {
+        AllergyResponseDTO allergy = allergyService.createAllergy(id, requestDTO);
+        return ResponseEntity.ok().body(allergy);
+    }
+
+    @PutMapping("/{patientId}/allergies/{allergyId}")
+    public ResponseEntity<AllergyResponseDTO> updateAllergy(@PathVariable UUID patientId,
+                                                           @PathVariable UUID allergyId,
+                                                           @Valid @RequestBody AllergyRequestDTO requestDTO) {
+        AllergyResponseDTO allergy = allergyService.updateAllergy(patientId, allergyId, requestDTO);
+        return ResponseEntity.ok().body(allergy);
+    }
+
+    @DeleteMapping("/{patientId}/allergies/{allergyId}")
+    public ResponseEntity<Void> deleteAllergy(@PathVariable UUID patientId, @PathVariable UUID allergyId) {
+        allergyService.deleteAllergy(patientId, allergyId);
         return ResponseEntity.ok().build();
     }
 }
