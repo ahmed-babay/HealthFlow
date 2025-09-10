@@ -1,0 +1,111 @@
+### Complete Medical Workflow Test
+### This demonstrates a realistic patient care scenario
+
+### 1. Create a new patient
+POST http://localhost:4000/patients
+Content-Type: application/json
+Authorization: Bearer {{doctor_jwt_token}}
+
+{
+  "name": "Emily Rodriguez",
+  "email": "emily.rodriguez@email.com",
+  "address": "456 Oak Street, Medical City, MC 12345",
+  "dateOfBirth": "1985-03-15",
+  "registeredDate": "2025-01-10"
+}
+
+###
+
+### 2. Add critical allergies (medical safety)
+POST http://localhost:4000/patients/{{patient_id}}/allergies
+Content-Type: application/json
+Authorization: Bearer {{doctor_jwt_token}}
+
+{
+  "patientId": "{{patient_id}}",
+  "allergen": "Shellfish",
+  "allergyType": "FOOD",
+  "severity": "LIFE_THREATENING",
+  "reaction": "Anaphylaxis, throat swelling, difficulty breathing",
+  "notes": "Patient carries EpiPen. Avoid all shellfish and cross-contaminated foods.",
+  "isActive": true
+}
+
+###
+
+### 3. Create medical record for office visit
+POST http://localhost:4000/medical-records
+Content-Type: application/json
+Authorization: Bearer {{doctor_jwt_token}}
+
+{
+  "patientId": "{{patient_id}}",
+  "chiefComplaint": "Annual physical examination and allergy follow-up",
+  "symptoms": "No acute symptoms. Patient reports good overall health. Requesting allergy management review.",
+  "examinationNotes": "Vital signs normal. Heart rate: 72 bpm, BP: 118/76, Temp: 98.6°F. No acute distress. EpiPen present and not expired.",
+  "treatmentPlan": "Continue current allergy management. Renew EpiPen prescription. Schedule follow-up in 6 months.",
+  "doctorNotes": "Patient demonstrates good understanding of allergy management. Emergency action plan reviewed.",
+  "attendingDoctor": "Dr. Sarah Johnson"
+}
+
+###
+
+### 4. Add diagnosis to the medical record
+POST http://localhost:4000/medical-records/{{medical_record_id}}/diagnoses
+Content-Type: application/json
+Authorization: Bearer {{doctor_jwt_token}}
+
+{
+  "diagnosisCode": "T78.02XA",
+  "diagnosisName": "Anaphylactic reaction due to shellfish, initial encounter",
+  "description": "Severe food allergy with history of anaphylactic reactions",
+  "severity": "SEVERE",
+  "status": "CHRONIC",
+  "notes": "Well-controlled with avoidance and emergency medication"
+}
+
+###
+
+### 5. Add prescription to the medical record
+POST http://localhost:4000/medical-records/{{medical_record_id}}/prescriptions
+Content-Type: application/json
+Authorization: Bearer {{doctor_jwt_token}}
+
+{
+  "medicationName": "EpiPen Auto-Injector (Epinephrine)",
+  "medicationCode": "NDC-49502-500-02",
+  "dosage": "0.3mg",
+  "frequency": "As needed for anaphylactic reaction",
+  "durationDays": 365,
+  "quantity": 2,
+  "instructions": "Use immediately for severe allergic reaction. Call 911 after use. Carry at all times. Replace before expiration date.",
+  "prescribingDoctor": "Dr. Sarah Johnson",
+  "status": "ACTIVE",
+  "notes": "Patient educated on proper use. Emergency action plan provided."
+}
+
+###
+
+### 6. Get patient's complete medical overview
+GET http://localhost:4000/patients/{{patient_id}}/allergies/severe
+Authorization: Bearer {{doctor_jwt_token}}
+
+###
+
+### 7. Get all medical records for patient
+GET http://localhost:4000/medical-records/patient/{{patient_id}}
+Authorization: Bearer {{doctor_jwt_token}}
+
+###
+
+### 8. Get diagnoses for the medical record
+GET http://localhost:4000/medical-records/{{medical_record_id}}/diagnoses
+Authorization: Bearer {{doctor_jwt_token}}
+
+###
+
+### 9. Get prescriptions for the medical record
+GET http://localhost:4000/medical-records/{{medical_record_id}}/prescriptions
+Authorization: Bearer {{doctor_jwt_token}}
+
+###
