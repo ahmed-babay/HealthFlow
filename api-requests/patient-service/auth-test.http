@@ -1,0 +1,63 @@
+### Register a new doctor user
+POST http://localhost:4000/auth/register
+Content-Type: application/json
+
+{
+  "username": "dr.johnson",
+  "email": "sarah.johnson@hospital.com",
+  "password": "SecurePassword123!",
+  "firstName": "Dr. Sarah",
+  "lastName": "Johnson",
+  "role": "DOCTOR"
+}
+
+###
+
+### Register a new patient user
+POST http://localhost:4000/auth/register
+Content-Type: application/json
+
+{
+  "username": "john.doe",
+  "email": "john.doe@email.com", 
+  "password": "PatientPass123!",
+  "firstName": "John",
+  "lastName": "Doe",
+  "role": "PATIENT"
+}
+
+###
+
+### Login as doctor
+POST http://localhost:4000/auth/login
+Content-Type: application/json
+
+{
+  "username": "dr.johnson",
+  "password": "SecurePassword123!"
+}
+
+###
+
+### Login as patient
+POST http://localhost:4000/auth/login
+Content-Type: application/json
+
+{
+  "username": "john.doe",
+  "password": "PatientPass123!"
+}
+
+###
+
+### Test authentication - check current user
+GET http://localhost:4000/auth/me
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### Test protected endpoint - get patients (requires DOCTOR/ADMIN role)
+GET http://localhost:4000/patients
+Authorization: Bearer {{jwt_token}}
+
+###
