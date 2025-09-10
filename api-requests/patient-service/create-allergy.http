@@ -1,0 +1,63 @@
+### POST request to create patient allergy
+POST http://localhost:4000/patients/123e4567-e89b-12d3-a456-426614174000/allergies
+Content-Type: application/json
+
+{
+  "patientId": "123e4567-e89b-12d3-a456-426614174000",
+  "allergen": "Penicillin",
+  "allergyType": "MEDICATION",
+  "severity": "SEVERE",
+  "reaction": "Severe skin rash, difficulty breathing, swelling of face and throat",
+  "notes": "Patient experienced anaphylactic reaction to penicillin injection in 2020. Requires immediate medical attention if exposed. Carry EpiPen at all times.",
+  "isActive": true
+}
+
+###
+
+### POST request to create food allergy
+POST http://localhost:4000/patients/{{patient_id}}/allergies
+Content-Type: application/json
+
+{
+  "patientId": "{{patient_id}}",
+  "allergen": "Peanuts",
+  "allergyType": "FOOD",
+  "severity": "LIFE_THREATENING",
+  "reaction": "Anaphylaxis, severe swelling, respiratory distress",
+  "notes": "Diagnosed in childhood. Patient must avoid all peanut products and foods processed in facilities with peanuts. EpiPen prescribed.",
+  "isActive": true
+}
+
+###
+
+### POST request to create environmental allergy
+POST http://localhost:4000/patients/{{patient_id}}/allergies
+Content-Type: application/json
+
+{
+  "patientId": "{{patient_id}}",
+  "allergen": "Pollen (Ragweed)",
+  "allergyType": "ENVIRONMENTAL",
+  "severity": "MODERATE",
+  "reaction": "Sneezing, runny nose, watery eyes, nasal congestion",
+  "notes": "Seasonal allergy most severe in late summer and fall. Responds well to antihistamines.",
+  "isActive": true
+}
+
+###
+
+### POST request to create mild allergy
+POST http://localhost:4000/patients/{{patient_id}}/allergies
+Content-Type: application/json
+
+{
+  "patientId": "{{patient_id}}",
+  "allergen": "Latex",
+  "allergyType": "CONTACT",
+  "severity": "MILD",
+  "reaction": "Skin redness and mild itching at contact site",
+  "notes": "Developed after frequent use of latex gloves. Use nitrile gloves instead.",
+  "isActive": true
+}
+
+###

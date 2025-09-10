@@ -1,0 +1,47 @@
+### PUT request to update allergy severity (e.g., allergy got worse)
+PUT http://localhost:4000/patients/{{patient_id}}/allergies/{{allergy_id}}
+Content-Type: application/json
+
+{
+  "patientId": "{{patient_id}}",
+  "allergen": "Penicillin",
+  "allergyType": "MEDICATION",
+  "severity": "LIFE_THREATENING",
+  "reaction": "Severe anaphylactic reaction, loss of consciousness, requires immediate epinephrine",
+  "notes": "Allergy severity increased after recent exposure. Patient now requires immediate medical supervision if any penicillin-based medication is considered. Updated EpiPen prescription.",
+  "isActive": true
+}
+
+###
+
+### PUT request to deactivate resolved allergy
+PUT http://localhost:4000/patients/{{patient_id}}/allergies/{{allergy_id}}
+Content-Type: application/json
+
+{
+  "patientId": "{{patient_id}}",
+  "allergen": "Pollen (Ragweed)",
+  "allergyType": "ENVIRONMENTAL",
+  "severity": "MODERATE",
+  "reaction": "Sneezing, runny nose, watery eyes, nasal congestion",
+  "notes": "After immunotherapy treatment, patient no longer experiences significant reactions. Monitoring for one more season before considering fully resolved.",
+  "isActive": false
+}
+
+###
+
+### PUT request to update allergy notes and reaction details
+PUT http://localhost:4000/patients/{{patient_id}}/allergies/{{allergy_id}}
+Content-Type: application/json
+
+{
+  "patientId": "{{patient_id}}",
+  "allergen": "Peanuts",
+  "allergyType": "FOOD",
+  "severity": "LIFE_THREATENING",
+  "reaction": "Anaphylaxis within 5-10 minutes of exposure, severe swelling, respiratory distress, drop in blood pressure",
+  "notes": "Recent testing confirmed continued severe allergy. Patient education updated on reading food labels. New EpiPen auto-injector prescribed. Emergency action plan reviewed with family.",
+  "isActive": true
+}
+
+###
