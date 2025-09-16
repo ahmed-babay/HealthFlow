@@ -1,9 +1,13 @@
 package com.patient.service.patientservice.dto;
 
+import com.patient.service.patientservice.validation.ValidAllergyInteraction;
+import com.patient.service.patientservice.validation.ValidPrescriptionDates;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 
+@ValidPrescriptionDates(maxDurationDays = 90)
+@ValidAllergyInteraction(strictMode = true)
 public class PrescriptionRequestDTO {
 
     @NotBlank(message = "Medication name is required")

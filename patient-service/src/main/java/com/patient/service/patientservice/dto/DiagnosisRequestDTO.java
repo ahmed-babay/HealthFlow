@@ -1,5 +1,6 @@
 package com.patient.service.patientservice.dto;
 
+import com.patient.service.patientservice.validation.ValidICD10Code;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -7,6 +8,7 @@ public class DiagnosisRequestDTO {
 
     @NotBlank(message = "Diagnosis code is required")
     @Size(max = 20, message = "Diagnosis code cannot exceed 20 characters")
+    @ValidICD10Code(message = "Invalid ICD-10 diagnosis code format")
     private String diagnosisCode;
 
     @NotBlank(message = "Diagnosis name is required")
