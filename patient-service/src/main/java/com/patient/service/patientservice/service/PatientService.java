@@ -8,6 +8,9 @@ import com.patient.service.patientservice.mapper.PatientMapper;
 import com.patient.service.patientservice.model.Patient;
 import com.patient.service.patientservice.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -23,12 +26,21 @@ public class PatientService {
         this.patientRepository = patientRepository;
     }
 
+    @Cacheable(value = "patients", key = "'all-patients'")
     public List<PatientResponseDTO> getPatients(){
         List<Patient> patients = patientRepository.findAll();
         return patients.stream()
                 .map(PatientMapper::toDTO).toList();
     }
 
+    @Cacheable(value = "patients", key = "#id.toString()")
+    public PatientResponseDTO getPatientById(UUID id) {
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new PatientNotFoundException("Patient not found with ID: " + id));
+        return PatientMapper.toDTO(patient);
+    }
+
+    @CacheEvict(value = "patients", key = "'all-patients'")
     public PatientResponseDTO createPatient(PatientRequestDTO patientRequestDTO){
         if(patientRepository.existsByEmail(patientRequestDTO.getEmail())){
             throw new EmailAlreadyExistsException("Patient with this Email" + "already exists"+ patientRequestDTO.getEmail());
@@ -38,6 +50,10 @@ public class PatientService {
         return PatientMapper.toDTO(newPatient);
     }
 
+    @Caching(evict = {
+        @CacheEvict(value = "patients", key = "'all-patients'"),
+        @CacheEvict(value = "patients", key = "#id.toString()")
+    })
     public PatientResponseDTO updatePatient(UUID id, PatientRequestDTO patientRequestDTO){
         Patient patient = patientRepository.findById(id).orElseThrow(()-> new PatientNotFoundException("Patient not found with ID: "+ id));
 
@@ -54,6 +70,12 @@ public class PatientService {
     }
 
 
+    @Caching(evict = {
+        @CacheEvict(value = "patients", key = "'all-patients'"),
+        @CacheEvict(value = "patients", key = "#id.toString()"),
+        @CacheEvict(value = "allergies", key = "#id.toString() + '-allergies'"),
+        @CacheEvict(value = "medical-records", key = "#id.toString() + '-records'")
+    })
     public void deletePatient(UUID id, PatientRequestDTO patientRequestDTO){
         Patient patient = patientRepository.findById(id).orElseThrow(()-> new PatientNotFoundException("Patient not found with ID: "+id));
         patientRepository.delete(patient);
