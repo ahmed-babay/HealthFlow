@@ -9,6 +9,9 @@ import com.patient.service.patientservice.model.Patient;
 import com.patient.service.patientservice.repository.AllergyRepository;
 import com.patient.service.patientservice.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +29,7 @@ public class AllergyService {
         this.patientRepository = patientRepository;
     }
 
+    @Cacheable(value = "allergies", key = "#patientId.toString() + '-allergies'")
     public List<AllergyResponseDTO> getAllergiesByPatientId(UUID patientId) {
         // Validate patient exists
         if (!patientRepository.existsById(patientId)) {
@@ -38,6 +42,7 @@ public class AllergyService {
                 .toList();
     }
 
+    @Cacheable(value = "allergies", key = "#patientId.toString() + '-active-allergies'")
     public List<AllergyResponseDTO> getActiveAllergiesByPatientId(UUID patientId) {
         // Validate patient exists
         if (!patientRepository.existsById(patientId)) {
@@ -50,6 +55,7 @@ public class AllergyService {
                 .toList();
     }
 
+    @Cacheable(value = "allergies", key = "#patientId.toString() + '-severe-allergies'")
     public List<AllergyResponseDTO> getSevereAllergiesByPatientId(UUID patientId) {
         // Validate patient exists
         if (!patientRepository.existsById(patientId)) {
@@ -79,6 +85,11 @@ public class AllergyService {
         return AllergyMapper.toDTO(allergy);
     }
 
+    @Caching(evict = {
+        @CacheEvict(value = "allergies", key = "#patientId.toString() + '-allergies'"),
+        @CacheEvict(value = "allergies", key = "#patientId.toString() + '-active-allergies'"),
+        @CacheEvict(value = "allergies", key = "#patientId.toString() + '-severe-allergies'")
+    })
     public AllergyResponseDTO createAllergy(UUID patientId, AllergyRequestDTO requestDTO) {
         // Validate patient exists
         Patient patient = patientRepository.findById(patientId)
@@ -92,6 +103,11 @@ public class AllergyService {
         return AllergyMapper.toDTO(savedAllergy);
     }
 
+    @Caching(evict = {
+        @CacheEvict(value = "allergies", key = "#patientId.toString() + '-allergies'"),
+        @CacheEvict(value = "allergies", key = "#patientId.toString() + '-active-allergies'"),
+        @CacheEvict(value = "allergies", key = "#patientId.toString() + '-severe-allergies'")
+    })
     public AllergyResponseDTO updateAllergy(UUID patientId, UUID allergyId, AllergyRequestDTO requestDTO) {
         // Validate patient exists
         if (!patientRepository.existsById(patientId)) {
@@ -111,6 +127,11 @@ public class AllergyService {
         return AllergyMapper.toDTO(updatedAllergy);
     }
 
+    @Caching(evict = {
+        @CacheEvict(value = "allergies", key = "#patientId.toString() + '-allergies'"),
+        @CacheEvict(value = "allergies", key = "#patientId.toString() + '-active-allergies'"),
+        @CacheEvict(value = "allergies", key = "#patientId.toString() + '-severe-allergies'")
+    })
     public void deleteAllergy(UUID patientId, UUID allergyId) {
         // Validate patient exists
         if (!patientRepository.existsById(patientId)) {
