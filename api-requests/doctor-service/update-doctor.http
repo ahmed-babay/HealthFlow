@@ -1,0 +1,97 @@
+### Update Doctor - Valid Update (Dr. Sarah Johnson)
+PUT http://localhost:4001/api/v1/doctors/550e8400-e29b-41d4-a716-446655440001
+Content-Type: application/json
+
+{
+  "name": "Dr. Sarah Johnson-Smith",
+  "email": "sarah.johnson.smith@hospital.com",
+  "specialization": "Interventional Cardiology",
+  "licenseNumber": "MD123456-UPDATED",
+  "phoneNumber": "+1234567890",
+  "yearsOfExperience": 16,
+  "registrationDate": "2015-03-15"
+}
+
+### Update Doctor - Change Email Only (Dr. Michael Chen)
+PUT http://localhost:4001/api/v1/doctors/550e8400-e29b-41d4-a716-446655440002
+Content-Type: application/json
+
+{
+  "name": "Dr. Michael Chen",
+  "email": "m.chen.updated@hospital.com",
+  "specialization": "Neurology",
+  "licenseNumber": "MD789012",
+  "phoneNumber": "+1234567891",
+  "yearsOfExperience": 12,
+  "registrationDate": "2018-06-20"
+}
+
+### Update Doctor - Increase Experience (Dr. Emily Rodriguez)
+PUT http://localhost:4001/api/v1/doctors/550e8400-e29b-41d4-a716-446655440003
+Content-Type: application/json
+
+{
+  "name": "Dr. Emily Rodriguez",
+  "email": "emily.rodriguez@hospital.com",
+  "specialization": "Pediatric Surgery",
+  "licenseNumber": "MD345678",
+  "phoneNumber": "+1234567892",
+  "yearsOfExperience": 10,
+  "registrationDate": "2020-01-10"
+}
+
+### Update Doctor - Conflicting Email (Should Fail)
+PUT http://localhost:4001/api/v1/doctors/550e8400-e29b-41d4-a716-446655440004
+Content-Type: application/json
+
+{
+  "name": "Dr. David Wilson",
+  "email": "sarah.johnson@hospital.com",
+  "specialization": "Orthopedics",
+  "licenseNumber": "MD901234",
+  "phoneNumber": "+1234567893",
+  "yearsOfExperience": 20,
+  "registrationDate": "2010-09-05"
+}
+
+### Update Doctor - Conflicting License Number (Should Fail)
+PUT http://localhost:4001/api/v1/doctors/550e8400-e29b-41d4-a716-446655440005
+Content-Type: application/json
+
+{
+  "name": "Dr. Lisa Thompson",
+  "email": "lisa.thompson@hospital.com",
+  "specialization": "Dermatology",
+  "licenseNumber": "MD123456",
+  "phoneNumber": "+1234567894",
+  "yearsOfExperience": 10,
+  "registrationDate": "2019-11-12"
+}
+
+### Update Doctor - Non-existent ID (Should Return 404)
+PUT http://localhost:4001/api/v1/doctors/550e8400-e29b-41d4-a716-446655440999
+Content-Type: application/json
+
+{
+  "name": "Dr. Non Existent",
+  "email": "nonexistent@hospital.com",
+  "specialization": "General Medicine",
+  "licenseNumber": "MD999999",
+  "phoneNumber": "+1555999999",
+  "yearsOfExperience": 5,
+  "registrationDate": "2020-01-01"
+}
+
+### Update Doctor - Invalid Data (Validation Errors)
+PUT http://localhost:4001/api/v1/doctors/550e8400-e29b-41d4-a716-446655440006
+Content-Type: application/json
+
+{
+  "name": "",
+  "email": "invalid-email-format",
+  "specialization": "",
+  "licenseNumber": "INVALID",
+  "phoneNumber": "123",
+  "yearsOfExperience": -1,
+  "registrationDate": "2030-12-31"
+}

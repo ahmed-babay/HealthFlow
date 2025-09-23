@@ -1,0 +1,17 @@
+### Delete Doctor - Existing Doctor (Dr. James Anderson)
+DELETE http://localhost:4001/api/v1/doctors/550e8400-e29b-41d4-a716-446655440006
+
+### Delete Doctor - Another Existing Doctor (Dr. Jennifer Davis)
+DELETE http://localhost:4001/api/v1/doctors/550e8400-e29b-41d4-a716-446655440009
+
+### Delete Doctor - Non-existent ID (Should Return 404)
+DELETE http://localhost:4001/api/v1/doctors/550e8400-e29b-41d4-a716-446655440999
+
+### Delete Doctor - Invalid UUID Format (Should Return 400)
+DELETE http://localhost:4001/api/v1/doctors/invalid-uuid-format
+
+### Verify Deletion - Try to Get Deleted Doctor (Should Return 404)
+GET http://localhost:4001/api/v1/doctors/550e8400-e29b-41d4-a716-446655440006
+
+### Get All Doctors After Deletion (Verify Doctor is Removed)
+GET http://localhost:4001/api/v1/doctors

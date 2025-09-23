@@ -1,0 +1,64 @@
+### Create Doctor - Valid Request
+POST http://localhost:4001/api/v1/doctors
+Content-Type: application/json
+
+{
+  "name": "Dr. Alex Martinez",
+  "email": "alex.martinez@hospital.com",
+  "specialization": "Emergency Medicine", 
+  "licenseNumber": "MD987654",
+  "phoneNumber": "+1555123456",
+  "yearsOfExperience": 8,
+  "registrationDate": "2020-03-15"
+}
+
+### Create Doctor - Duplicate Email (Should Fail)
+POST http://localhost:4001/api/v1/doctors
+Content-Type: application/json
+
+{
+  "name": "Dr. John Duplicate",
+  "email": "sarah.johnson@hospital.com",
+  "specialization": "Family Medicine",
+  "licenseNumber": "MD999888",
+  "phoneNumber": "+1555999888",
+  "yearsOfExperience": 5,
+  "registrationDate": "2021-01-10"
+}
+
+### Create Doctor - Duplicate License Number (Should Fail)
+POST http://localhost:4001/api/v1/doctors
+Content-Type: application/json
+
+{
+  "name": "Dr. Jane Duplicate",
+  "email": "jane.duplicate@hospital.com", 
+  "specialization": "Internal Medicine",
+  "licenseNumber": "MD123456",
+  "phoneNumber": "+1555777666",
+  "yearsOfExperience": 10,
+  "registrationDate": "2019-06-20"
+}
+
+### Create Doctor - Invalid Data (Validation Errors)
+POST http://localhost:4001/api/v1/doctors
+Content-Type: application/json
+
+{
+  "name": "",
+  "email": "invalid-email",
+  "specialization": "Cardiology",
+  "licenseNumber": "INVALID",
+  "phoneNumber": "123",
+  "yearsOfExperience": -5,
+  "registrationDate": "2030-01-01"
+}
+
+### Create Doctor - Missing Required Fields
+POST http://localhost:4001/api/v1/doctors
+Content-Type: application/json
+
+{
+  "name": "Dr. Incomplete",
+  "email": "incomplete@hospital.com"
+}

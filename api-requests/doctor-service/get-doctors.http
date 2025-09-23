@@ -1,0 +1,14 @@
+### Get All Doctors
+GET http://localhost:4001/api/v1/doctors
+
+### Get Doctor by ID - Existing Doctor (Dr. Sarah Johnson)
+GET http://localhost:4001/api/v1/doctors/550e8400-e29b-41d4-a716-446655440001
+
+### Get Doctor by ID - Another Existing Doctor (Dr. Michael Chen)
+GET http://localhost:4001/api/v1/doctors/550e8400-e29b-41d4-a716-446655440002
+
+### Get Doctor by ID - Non-existent ID (Should Return 404)
+GET http://localhost:4001/api/v1/doctors/550e8400-e29b-41d4-a716-446655440999
+
+### Get Doctor by ID - Invalid UUID Format (Should Return 400)
+GET http://localhost:4001/api/v1/doctors/invalid-uuid-format
