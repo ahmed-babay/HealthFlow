@@ -12,7 +12,7 @@
     <artifactId>doctor-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>doctor-service</name>
-    <description>doctor-service</description>
+    <description>Doctor Management Microservice - Handles doctor information, specializations, and medical staff operations</description>
     <url/>
     <licenses>
         <license/>
