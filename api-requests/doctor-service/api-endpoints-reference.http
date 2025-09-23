@@ -1,0 +1,106 @@
+### DOCTOR SERVICE API ENDPOINTS REFERENCE
+### Complete list of all available endpoints with examples
+
+### ===========================================
+### BASIC CRUD OPERATIONS
+### ===========================================
+
+### Create New Doctor
+POST http://localhost:4001/api/v1/doctors
+Content-Type: application/json
+
+### Get All Doctors
+GET http://localhost:4001/api/v1/doctors
+
+### Get Doctor by ID
+GET http://localhost:4001/api/v1/doctors/{id}
+# Example: GET http://localhost:4001/api/v1/doctors/550e8400-e29b-41d4-a716-446655440001
+
+### Update Doctor
+PUT http://localhost:4001/api/v1/doctors/{id}
+Content-Type: application/json
+
+### Delete Doctor
+DELETE http://localhost:4001/api/v1/doctors/{id}
+# Example: DELETE http://localhost:4001/api/v1/doctors/550e8400-e29b-41d4-a716-446655440001
+
+### ===========================================
+### SEARCH OPERATIONS
+### ===========================================
+
+### Search by Specialization (case-insensitive, partial match)
+GET http://localhost:4001/api/v1/doctors/search/specialization?q={specialization}
+# Examples:
+# GET http://localhost:4001/api/v1/doctors/search/specialization?q=Cardiology
+# GET http://localhost:4001/api/v1/doctors/search/specialization?q=cardio
+
+### Search by Minimum Years of Experience
+GET http://localhost:4001/api/v1/doctors/search/experience?min={years}
+# Examples:
+# GET http://localhost:4001/api/v1/doctors/search/experience?min=10
+# GET http://localhost:4001/api/v1/doctors/search/experience?min=15
+
+### Find Doctor by Email
+GET http://localhost:4001/api/v1/doctors/search/email?email={email}
+# Example: GET http://localhost:4001/api/v1/doctors/search/email?email=sarah.johnson@hospital.com
+
+### Find Doctor by License Number
+GET http://localhost:4001/api/v1/doctors/search/license?number={licenseNumber}
+# Example: GET http://localhost:4001/api/v1/doctors/search/license?number=MD123456
+
+### ===========================================
+### SAMPLE REQUEST BODIES
+### ===========================================
+
+### Sample Doctor Creation Request:
+# {
+#   "name": "Dr. John Smith",
+#   "email": "john.smith@hospital.com",
+#   "specialization": "Internal Medicine",
+#   "licenseNumber": "MD123456",
+#   "phoneNumber": "+1234567890",
+#   "yearsOfExperience": 10,
+#   "registrationDate": "2020-01-15"
+# }
+
+### Sample Doctor Update Request:
+# {
+#   "name": "Dr. John Smith Jr.",
+#   "email": "john.smith.jr@hospital.com",
+#   "specialization": "Family Medicine",
+#   "licenseNumber": "MD123456-UPDATED",
+#   "phoneNumber": "+1234567890",
+#   "yearsOfExperience": 11,
+#   "registrationDate": "2020-01-15"
+# }
+
+### ===========================================
+### TEST DATA IDs (Available from data.sql)
+### ===========================================
+
+### Dr. Sarah Johnson (Cardiology, 15 years)
+# ID: 550e8400-e29b-41d4-a716-446655440001
+# Email: sarah.johnson@hospital.com
+# License: MD123456
+
+### Dr. Michael Chen (Neurology, 12 years)
+# ID: 550e8400-e29b-41d4-a716-446655440002
+# Email: michael.chen@hospital.com
+# License: MD789012
+
+### Dr. Emily Rodriguez (Pediatrics, 8 years)
+# ID: 550e8400-e29b-41d4-a716-446655440003
+# Email: emily.rodriguez@hospital.com
+# License: MD345678
+
+
+### ===========================================
+### EXPECTED HTTP STATUS CODES
+### ===========================================
+
+### 200 OK - Successful GET, PUT operations
+### 201 Created - Successful POST operation
+### 204 No Content - Successful DELETE operation
+### 400 Bad Request - Validation errors, invalid data
+### 404 Not Found - Doctor not found
+### 409 Conflict - Duplicate email or license number (mapped as 400 in our implementation)
