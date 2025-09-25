@@ -2,6 +2,7 @@ package com.auth.service.authservice.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -13,10 +14,11 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    private final String SECRET_KEY = "0bb803a12ab9b4bf7843c880fdf13f027076a892e72d6b796bef58cd858db5a0";
+    @Value("${jwt.secret}")
+    private String SECRET_KEY;
     
-    // Token expiration time (24 hours)
-    private final long JWT_EXPIRATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+    @Value("${jwt.expiration}")
+    private long JWT_EXPIRATION;
 
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
