@@ -33,3 +33,7 @@ build/
 .vscode/
 patient-service/mvnw
 
+### Security Keys ###
+**/keys/private-key.pem
+**/keys/*.pem
+
