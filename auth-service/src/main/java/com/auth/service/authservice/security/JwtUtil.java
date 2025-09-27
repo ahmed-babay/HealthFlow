@@ -3,9 +3,19 @@ package com.auth.service.authservice.security;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.KeyFactory;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,14 +24,51 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
-    private String SECRET_KEY;
+    @Value("${jwt.private-key-path}")
+    private String privateKeyPath;
+    
+    @Value("${jwt.public-key-path}")
+    private String publicKeyPath;
     
     @Value("${jwt.expiration}")
     private long JWT_EXPIRATION;
 
-    private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+    private PrivateKey getPrivateKey() {
+        try {
+            ClassPathResource resource = new ClassPathResource(privateKeyPath.replace("classpath:", ""));
+            String keyContent = new String(Files.readAllBytes(Paths.get(resource.getURI())));
+            
+            // Remove PEM headers and whitespace
+            keyContent = keyContent.replace("-----BEGIN PRIVATE KEY-----", "")
+                                 .replace("-----END PRIVATE KEY-----", "")
+                                 .replaceAll("\\s", "");
+            
+            byte[] keyBytes = Base64.getDecoder().decode(keyContent);
+            PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            return keyFactory.generatePrivate(spec);
+        } catch (Exception e) {
+            throw new RuntimeException("Error loading private key from file", e);
+        }
+    }
+
+    public PublicKey getPublicKey() {
+        try {
+            ClassPathResource resource = new ClassPathResource(publicKeyPath.replace("classpath:", ""));
+            String keyContent = new String(Files.readAllBytes(Paths.get(resource.getURI())));
+            
+            // Remove PEM headers and whitespace
+            keyContent = keyContent.replace("-----BEGIN PUBLIC KEY-----", "")
+                                 .replace("-----END PUBLIC KEY-----", "")
+                                 .replaceAll("\\s", "");
+            
+            byte[] keyBytes = Base64.getDecoder().decode(keyContent);
+            X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            return keyFactory.generatePublic(spec);
+        } catch (Exception e) {
+            throw new RuntimeException("Error loading public key from file", e);
+        }
     }
 
     // 1. GENERATE TOKEN - Create a JWT token for a user
@@ -38,7 +85,7 @@ public class JwtUtil {
                 .subject(subject)                         // Username
                 .issuedAt(new Date(System.currentTimeMillis()))  // Token creation time
                 .expiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION)) // Expiration time
-                .signWith(getSigningKey())               // Sign with secret key
+                .signWith(getPrivateKey(), SignatureAlgorithm.RS256)  // Sign with private key using RSA
                 .compact();                              // Convert to string
     }
 
@@ -67,7 +114,7 @@ public class JwtUtil {
     private Claims extractAllClaims(String token) {
         try {
             return Jwts.parser()
-                    .verifyWith(getSigningKey())
+                    .verifyWith(getPublicKey())
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
