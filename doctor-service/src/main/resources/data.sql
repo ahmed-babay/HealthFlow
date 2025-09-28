@@ -1,3 +1,15 @@
+-- Ensure the 'doctor' table exists
+CREATE TABLE IF NOT EXISTS Doctor
+(
+    id              UUID PRIMARY KEY,
+    name            VARCHAR(255)        NOT NULL,
+    email           VARCHAR(255) UNIQUE NOT NULL,
+    specialization  VARCHAR(255)        NOT NULL,
+    license_number  VARCHAR(255)        NOT NULL,
+    phone_number    VARCHAR(255) UNIQUE NOT NULL,
+    years_of_experience INT             NOT NULL,
+    registered_date DATE                NOT NULL
+    );
 
 -- Sample doctors for testing and development
 INSERT INTO Doctor (id, name, email, specialization, license_number, phone_number, years_of_experience, registered_date) VALUES
