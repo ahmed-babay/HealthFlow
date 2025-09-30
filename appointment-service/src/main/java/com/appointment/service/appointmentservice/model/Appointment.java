@@ -155,6 +155,7 @@ public class Appointment {
 
     // Enums
     public enum AppointmentStatus {
+        RESCHEDULED,
         SCHEDULED,
         CONFIRMED,
         IN_PROGRESS,
