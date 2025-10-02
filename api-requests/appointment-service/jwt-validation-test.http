@@ -1,0 +1,93 @@
+### JWT Validation Test for Appointment Service
+### This tests the OAuth2 Resource Server integration with JWK
+
+### 1. Test Health Check (No Auth Required)
+GET http://localhost:4003/api/appointments/health
+
+###
+
+### 2. Test JWK Endpoint from Auth Service
+GET http://localhost:4002/auth/.well-known/jwks.json
+
+###
+
+### 3. Login to get JWT token
+POST http://localhost:4002/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "password123"
+}
+
+###
+
+### 4. Test Appointment Endpoint WITHOUT Token (Should Fail)
+GET http://localhost:4003/api/appointments
+
+###
+
+### 5. Test Appointment Endpoint WITH Invalid Token (Should Fail)
+GET http://localhost:4003/api/appointments
+Authorization: Bearer invalid_token_here
+
+###
+
+### 6. Test Appointment Endpoint WITH Valid Token (Should Work)
+GET http://localhost:4003/api/appointments
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### 7. Test Create Appointment WITH Valid Token
+POST http://localhost:4003/api/appointments
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "patientId": 1,
+  "doctorId": 1,
+  "appointmentDateTime": "2025-01-15T10:00:00",
+  "durationMinutes": 30,
+  "type": "CONSULTATION",
+  "status": "SCHEDULED",
+  "notes": "Test appointment with JWT validation"
+}
+
+###
+
+### 8. Test Doctor Login and Appointment Access
+POST http://localhost:4002/auth/login
+Content-Type: application/json
+
+{
+  "username": "dr.smith",
+  "password": "doctor123"
+}
+
+###
+
+### 9. Test Appointment Access with Doctor Token
+GET http://localhost:4003/api/appointments
+Authorization: Bearer {{doctor_jwt_token}}
+
+###
+
+### 10. Test Admin Login and Appointment Access
+POST http://localhost:4002/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+###
+
+### 11. Test Appointment Access with Admin Token
+GET http://localhost:4003/api/appointments
+Authorization: Bearer {{admin_jwt_token}}
+
+###
+
+
