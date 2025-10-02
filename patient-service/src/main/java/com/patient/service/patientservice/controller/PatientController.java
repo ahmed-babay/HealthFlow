@@ -7,10 +7,14 @@ import com.patient.service.patientservice.dto.PatientResponseDTO;
 import com.patient.service.patientservice.service.AllergyService;
 import com.patient.service.patientservice.service.PatientService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -23,6 +27,18 @@ public class PatientController {
     public PatientController(PatientService patientService, AllergyService allergyService) {
         this.patientService = patientService;
         this.allergyService = allergyService;
+    }
+
+    /**
+     * Health check endpoint (no authentication required)
+     */
+    @GetMapping("/health")
+    public ResponseEntity<Map<String, String>> healthCheck() {
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "UP");
+        response.put("service", "patient-service");
+        response.put("timestamp", LocalDateTime.now().toString());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping
