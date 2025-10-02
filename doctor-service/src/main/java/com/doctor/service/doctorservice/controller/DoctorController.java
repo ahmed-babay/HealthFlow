@@ -9,7 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -26,6 +29,21 @@ public class DoctorController {
     @Autowired
     public DoctorController(DoctorService doctorService) {
         this.doctorService = doctorService;
+    }
+
+    /**
+     * Health check endpoint (no authentication required)
+     * GET /api/v1/doctors/health
+     * 
+     * @return service health status
+     */
+    @GetMapping("/health")
+    public ResponseEntity<Map<String, String>> healthCheck() {
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "UP");
+        response.put("service", "doctor-service");
+        response.put("timestamp", LocalDateTime.now().toString());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
