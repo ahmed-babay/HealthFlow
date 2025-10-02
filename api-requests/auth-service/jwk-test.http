@@ -1,0 +1,30 @@
+### JWK Endpoint Test
+### Test the JSON Web Key endpoint for JWT validation
+
+### 1. Test JWK Endpoint (Standard OAuth2 path)
+GET http://localhost:4002/auth/.well-known/jwks.json
+
+###
+
+### 2. Test JWK Endpoint (Alternative path)
+GET http://localhost:4002/auth/jwks
+
+###
+
+### 3. Test JWK Response Format
+# Expected response format:
+# {
+#   "keys": [
+#     {
+#       "kty": "RSA",
+#       "use": "sig",
+#       "kid": "auth-service-key",
+#       "alg": "RS256",
+#       "n": "base64-encoded-modulus",
+#       "e": "base64-encoded-exponent"
+#     }
+#   ]
+# }
+
+###
+
