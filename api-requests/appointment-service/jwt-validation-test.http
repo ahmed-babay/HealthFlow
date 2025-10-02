@@ -90,4 +90,38 @@ Authorization: Bearer {{admin_jwt_token}}
 
 ###
 
+### 12. Test Get Appointments by Patient with Valid Token
+GET http://localhost:4003/api/appointments/patient/1
+Authorization: Bearer {{jwt_token}}
 
+###
+
+### 13. Test Get Appointments by Doctor with Valid Token
+GET http://localhost:4003/api/appointments/doctor/1
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### 14. Test Get Upcoming Appointments with Valid Token
+GET http://localhost:4003/api/appointments/patient/1/upcoming
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### 15. Test Reschedule Appointment with Valid Token
+PUT http://localhost:4003/api/appointments/1/reschedule?newDateTime=2025-01-16T10:00:00
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### 16. Test Cancel Appointment with Valid Token
+PUT http://localhost:4003/api/appointments/1/cancel
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### 17. Test Complete Appointment with Valid Token
+PUT http://localhost:4003/api/appointments/1/complete?notes=Appointment completed successfully
+Authorization: Bearer {{jwt_token}}
+
+###
