@@ -25,8 +25,16 @@ public class SecurityConfig {
             .authorizeHttpRequests(authz -> authz
                 // Allow health check and H2 console without authentication
                 .requestMatchers("/api/appointments/health", "/h2-console/**").permitAll()
-                // All other appointment endpoints require authentication
-                .requestMatchers("/api/appointments/**").authenticated()
+                
+                // APPOINTMENT endpoints - role-based access
+                .requestMatchers("GET", "/api/appointments/patient/**").hasAnyRole("PATIENT", "DOCTOR", "ADMIN")
+                .requestMatchers("GET", "/api/appointments/doctor/**").hasAnyRole("DOCTOR", "ADMIN")
+                .requestMatchers("GET", "/api/appointments").hasAnyRole("DOCTOR", "ADMIN")
+                .requestMatchers("POST", "/api/appointments/**").hasAnyRole("DOCTOR", "ADMIN")
+                .requestMatchers("PUT", "/api/appointments/**").hasAnyRole("DOCTOR", "ADMIN")
+                .requestMatchers("DELETE", "/api/appointments/**").hasAnyRole("DOCTOR", "ADMIN")
+                
+                // All other requests require authentication
                 .anyRequest().authenticated()
             )
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {}))
