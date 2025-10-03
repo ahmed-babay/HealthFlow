@@ -1,0 +1,233 @@
+### COMPREHENSIVE JWT VALIDATION TEST
+### This tests JWT validation across all microservices
+
+### 1. Test JWK Endpoint (Auth Service)
+GET http://localhost:4002/auth/.well-known/jwks.json
+
+###
+
+### 2. Register Test Users
+POST http://localhost:4002/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "email": "test@hospital.com",
+  "password": "password123",
+  "firstName": "Test",
+  "lastName": "User",
+  "role": "PATIENT"
+}
+
+###
+
+POST http://localhost:4002/auth/register
+Content-Type: application/json
+
+{
+  "username": "dr.smith",
+  "email": "smith@hospital.com",
+  "password": "doctor123",
+  "firstName": "Dr. John",
+  "lastName": "Smith",
+  "role": "DOCTOR"
+}
+
+###
+
+POST http://localhost:4002/auth/register
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "email": "admin@hospital.com",
+  "password": "admin123",
+  "firstName": "System",
+  "lastName": "Admin",
+  "role": "ADMIN"
+}
+
+###
+
+### 3. Login as Patient
+POST http://localhost:4002/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "password123"
+}
+
+###
+
+### 4. Test All Services Health Checks (No Auth Required)
+GET http://localhost:4000/patients/health
+
+###
+
+GET http://localhost:4001/api/v1/doctors/health
+
+###
+
+GET http://localhost:4003/api/appointments/health
+
+###
+
+### 5. Test Patient Service with JWT
+GET http://localhost:4000/patients
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### 6. Test Doctor Service with JWT
+GET http://localhost:4001/api/v1/doctors
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### 7. Test Appointment Service with JWT
+GET http://localhost:4003/api/appointments
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### 8. Login as Doctor
+POST http://localhost:4002/auth/login
+Content-Type: application/json
+
+{
+  "username": "dr.smith",
+  "password": "doctor123"
+}
+
+###
+
+### 9. Test All Services with Doctor Token
+GET http://localhost:4000/patients
+Authorization: Bearer {{doctor_jwt_token}}
+
+###
+
+GET http://localhost:4001/api/v1/doctors
+Authorization: Bearer {{doctor_jwt_token}}
+
+###
+
+GET http://localhost:4003/api/appointments
+Authorization: Bearer {{doctor_jwt_token}}
+
+###
+
+### 10. Login as Admin
+POST http://localhost:4002/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+###
+
+### 11. Test All Services with Admin Token
+GET http://localhost:4000/patients
+Authorization: Bearer {{admin_jwt_token}}
+
+###
+
+GET http://localhost:4001/api/v1/doctors
+Authorization: Bearer {{admin_jwt_token}}
+
+###
+
+GET http://localhost:4003/api/appointments
+Authorization: Bearer {{admin_jwt_token}}
+
+###
+
+### 12. Test Invalid Token (Should Fail)
+GET http://localhost:4000/patients
+Authorization: Bearer invalid_token
+
+###
+
+### 13. Test No Token (Should Fail)
+GET http://localhost:4000/patients
+
+###
+
+### 14. Test Expired Token (Should Fail)
+GET http://localhost:4000/patients
+Authorization: Bearer expired_token_here
+
+###
+
+### 15. Test Cross-Service Workflow
+# Create a patient
+POST http://localhost:4000/patients
+Content-Type: application/json
+Authorization: Bearer {{doctor_jwt_token}}
+
+{
+  "name": "John Doe",
+  "email": "john.doe@email.com",
+  "address": "123 Main St, City, ST 12345",
+  "dateOfBirth": "1985-05-15",
+  "registeredDate": "2025-01-10"
+}
+
+###
+
+# Create a doctor
+POST http://localhost:4001/api/v1/doctors
+Content-Type: application/json
+Authorization: Bearer {{admin_jwt_token}}
+
+{
+  "name": "Dr. Jane Smith",
+  "email": "jane.smith@hospital.com",
+  "specialization": "Cardiology",
+  "licenseNumber": "MD789012",
+  "phoneNumber": "+1987654321",
+  "yearsOfExperience": 10,
+  "registrationDate": "2015-01-01"
+}
+
+###
+
+# Create an appointment
+POST http://localhost:4003/api/appointments
+Content-Type: application/json
+Authorization: Bearer {{doctor_jwt_token}}
+
+{
+  "patientId": 1,
+  "doctorId": 1,
+  "appointmentDateTime": "2025-01-20T14:00:00",
+  "durationMinutes": 45,
+  "type": "CONSULTATION",
+  "status": "SCHEDULED",
+  "notes": "Initial consultation"
+}
+
+###
+
+### 16. Verify All Services Are Working
+GET http://localhost:4000/patients
+Authorization: Bearer {{doctor_jwt_token}}
+
+###
+
+GET http://localhost:4001/api/v1/doctors
+Authorization: Bearer {{doctor_jwt_token}}
+
+###
+
+GET http://localhost:4003/api/appointments
+Authorization: Bearer {{doctor_jwt_token}}
+
+###
+
+
+
+
