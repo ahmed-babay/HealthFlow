@@ -2,6 +2,7 @@ package com.patient.service.patientservice.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true) // Enable method-level security
 public class SecurityConfig {
 
     @Bean
@@ -25,10 +27,18 @@ public class SecurityConfig {
             .authorizeHttpRequests(authz -> authz
                 // Allow health check and H2 console without authentication
                 .requestMatchers("/patients/health", "/h2-console/**").permitAll()
-                // All other patient endpoints require authentication
-                .requestMatchers("/patients/**").authenticated()
-                .requestMatchers("/medical-records/**").authenticated()
-                .requestMatchers("/allergies/**").authenticated()
+                
+                // PATIENT endpoints - only DOCTOR and ADMIN can manage patients
+                .requestMatchers("/patients").hasAnyRole("DOCTOR", "ADMIN")
+                .requestMatchers("/patients/**").hasAnyRole("DOCTOR", "ADMIN")
+                
+                // MEDICAL RECORDS - only DOCTOR and ADMIN can access
+                .requestMatchers("/medical-records/**").hasAnyRole("DOCTOR", "ADMIN")
+                
+                // ALLERGIES - only DOCTOR and ADMIN can manage
+                .requestMatchers("/allergies/**").hasAnyRole("DOCTOR", "ADMIN")
+                
+                // All other requests require authentication
                 .anyRequest().authenticated()
             )
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {}))
