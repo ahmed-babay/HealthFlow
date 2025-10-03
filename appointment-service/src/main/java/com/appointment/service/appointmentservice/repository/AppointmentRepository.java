@@ -25,7 +25,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     List<Appointment> findByStatusOrderByAppointmentDateTimeAsc(AppointmentStatus status);
 
     // Find appointments by type
-    List<Appointment> findByTypeOrderByAppointmentDateTimeDesc(AppointmentType type);
+    List<Appointment> findByAppointmentTypeOrderByAppointmentDateTimeDesc(AppointmentType type);
 
     // Find appointments by patient ID and status
     List<Appointment> findByPatientIdAndStatusOrderByAppointmentDateTimeDesc(Long patientId, AppointmentStatus status);
