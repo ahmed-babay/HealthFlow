@@ -24,10 +24,25 @@ public class AppointmentService {
     @Autowired
     private AppointmentMapper appointmentMapper;
 
+    @Autowired
+    private ExternalServiceClient externalServiceClient;
+
     /**
      * Create a new appointment
      */
     public AppointmentResponseDTO createAppointment(AppointmentRequestDTO requestDTO) {
+        // Validate patient exists
+        Boolean patientExists = externalServiceClient.checkPatientExists(requestDTO.getPatientId());
+        if (patientExists == null || !patientExists) {
+            throw new IllegalArgumentException("Patient with ID " + requestDTO.getPatientId() + " does not exist");
+        }
+
+        // Validate doctor exists
+        Boolean doctorExists = externalServiceClient.checkDoctorExists(requestDTO.getDoctorId());
+        if (doctorExists == null || !doctorExists) {
+            throw new IllegalArgumentException("Doctor with ID " + requestDTO.getDoctorId() + " does not exist");
+        }
+
         // Check for scheduling conflicts
         if (hasSchedulingConflict(requestDTO.getDoctorId(), requestDTO.getAppointmentDateTime())) {
             throw new IllegalArgumentException("Doctor has a conflicting appointment at this time");
