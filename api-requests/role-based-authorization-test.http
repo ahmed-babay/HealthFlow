@@ -1,0 +1,245 @@
+### ROLE-BASED AUTHORIZATION TEST
+### This tests the role-based access control across all services
+
+### 1. Register different role users
+POST http://localhost:4002/auth/register
+Content-Type: application/json
+
+{
+  "username": "patient_user",
+  "email": "patient@hospital.com",
+  "password": "password123",
+  "firstName": "Patient",
+  "lastName": "User",
+  "role": "PATIENT"
+}
+
+###
+
+POST http://localhost:4002/auth/register
+Content-Type: application/json
+
+{
+  "username": "doctor_user",
+  "email": "doctor@hospital.com",
+  "password": "password123",
+  "firstName": "Dr. Doctor",
+  "lastName": "User",
+  "role": "DOCTOR"
+}
+
+###
+
+POST http://localhost:4002/auth/register
+Content-Type: application/json
+
+{
+  "username": "admin_user",
+  "email": "admin@hospital.com",
+  "password": "password123",
+  "firstName": "Admin",
+  "lastName": "User",
+  "role": "ADMIN"
+}
+
+###
+
+### 2. Login as PATIENT
+POST http://localhost:4002/auth/login
+Content-Type: application/json
+
+{
+  "username": "patient_user",
+  "password": "password123"
+}
+
+###
+
+### 3. Test PATIENT role access
+
+### PATIENT can view doctors (should work)
+GET http://localhost:4001/api/v1/doctors
+Authorization: Bearer {{patient_jwt_token}}
+
+###
+
+### PATIENT cannot view all patients (should fail - 403 Forbidden)
+GET http://localhost:4000/patients
+Authorization: Bearer {{patient_jwt_token}}
+
+###
+
+### PATIENT cannot create appointments (should fail - 403 Forbidden)
+POST http://localhost:4003/api/appointments
+Content-Type: application/json
+Authorization: Bearer {{patient_jwt_token}}
+
+{
+  "patientId": 1,
+  "doctorId": 1,
+  "appointmentDateTime": "2025-01-15T10:00:00",
+  "durationMinutes": 30,
+  "type": "CONSULTATION",
+  "status": "SCHEDULED",
+  "notes": "Test appointment"
+}
+
+###
+
+### PATIENT cannot create doctors (should fail - 403 Forbidden)
+POST http://localhost:4001/api/v1/doctors
+Content-Type: application/json
+Authorization: Bearer {{patient_jwt_token}}
+
+{
+  "name": "Dr. Test",
+  "email": "test@hospital.com",
+  "specialization": "General Medicine",
+  "licenseNumber": "MD123456",
+  "phoneNumber": "+1234567890",
+  "yearsOfExperience": 5,
+  "registrationDate": "2020-01-01"
+}
+
+###
+
+### 4. Login as DOCTOR
+POST http://localhost:4002/auth/login
+Content-Type: application/json
+
+{
+  "username": "doctor_user",
+  "password": "password123"
+}
+
+###
+
+### 5. Test DOCTOR role access
+
+### DOCTOR can view doctors (should work)
+GET http://localhost:4001/api/v1/doctors
+Authorization: Bearer {{doctor_jwt_token}}
+
+###
+
+### DOCTOR can view patients (should work)
+GET http://localhost:4000/patients
+Authorization: Bearer {{doctor_jwt_token}}
+
+###
+
+### DOCTOR can create appointments (should work)
+POST http://localhost:4003/api/appointments
+Content-Type: application/json
+Authorization: Bearer {{doctor_jwt_token}}
+
+{
+  "patientId": 1,
+  "doctorId": 1,
+  "appointmentDateTime": "2025-01-15T10:00:00",
+  "durationMinutes": 30,
+  "type": "CONSULTATION",
+  "status": "SCHEDULED",
+  "notes": "Test appointment"
+}
+
+###
+
+### DOCTOR cannot create doctors (should fail - 403 Forbidden)
+POST http://localhost:4001/api/v1/doctors
+Content-Type: application/json
+Authorization: Bearer {{doctor_jwt_token}}
+
+{
+  "name": "Dr. Test",
+  "email": "test@hospital.com",
+  "specialization": "General Medicine",
+  "licenseNumber": "MD123456",
+  "phoneNumber": "+1234567890",
+  "yearsOfExperience": 5,
+  "registrationDate": "2020-01-01"
+}
+
+###
+
+### 6. Login as ADMIN
+POST http://localhost:4002/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin_user",
+  "password": "password123"
+}
+
+###
+
+### 7. Test ADMIN role access
+
+### ADMIN can view doctors (should work)
+GET http://localhost:4001/api/v1/doctors
+Authorization: Bearer {{admin_jwt_token}}
+
+###
+
+### ADMIN can view patients (should work)
+GET http://localhost:4000/patients
+Authorization: Bearer {{admin_jwt_token}}
+
+###
+
+### ADMIN can create appointments (should work)
+POST http://localhost:4003/api/appointments
+Content-Type: application/json
+Authorization: Bearer {{admin_jwt_token}}
+
+{
+  "patientId": 1,
+  "doctorId": 1,
+  "appointmentDateTime": "2025-01-15T10:00:00",
+  "durationMinutes": 30,
+  "type": "CONSULTATION",
+  "status": "SCHEDULED",
+  "notes": "Test appointment"
+}
+
+###
+
+### ADMIN can create doctors (should work)
+POST http://localhost:4001/api/v1/doctors
+Content-Type: application/json
+Authorization: Bearer {{admin_jwt_token}}
+
+{
+  "name": "Dr. Admin Created",
+  "email": "admin.created@hospital.com",
+  "specialization": "General Medicine",
+  "licenseNumber": "MD999999",
+  "phoneNumber": "+9999999999",
+  "yearsOfExperience": 10,
+  "registrationDate": "2015-01-01"
+}
+
+###
+
+### 8. Test edge cases
+
+### Invalid role (should fail)
+GET http://localhost:4000/patients
+Authorization: Bearer invalid_token
+
+###
+
+### No token (should fail)
+GET http://localhost:4000/patients
+
+###
+
+### 9. Summary of expected results:
+### PATIENT: Can view doctors, cannot manage patients/appointments/doctors
+### DOCTOR: Can view doctors/patients, can manage appointments, cannot manage doctors
+### ADMIN: Can do everything
+
+###
+
+
+
