@@ -37,3 +37,5 @@ patient-service/mvnw
 **/keys/private-key.pem
 **/keys/*.pem
 
+assets/
+public/
