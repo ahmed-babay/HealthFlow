@@ -13,42 +13,37 @@ body {
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
-  /* Beautiful gradient background with patterns */
-  background: 
-    linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 50%, rgba(240, 147, 251, 0.9) 100%),
-    radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-  background-size: 400% 400%, 20px 20px;
-  background-attachment: fixed;
-  animation: gradientShift 20s ease infinite;
+  margin: 0;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
-/* Animated gradient */
-@keyframes gradientShift {
-  0% { background-position: 0% 50%, 0 0; }
-  50% { background-position: 100% 50%, 0 0; }
-  100% { background-position: 0% 50%, 0 0; }
-}
-
-/* Floating circles overlay */
-body::before {
-  content: '';
+/* Video background container */
+.video-background {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;
-  background-image: 
-    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 30%),
-    radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.08) 0%, transparent 35%);
-  animation: float 30s ease-in-out infinite;
+  z-index: -1;
+  overflow: hidden;
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-30px); }
+.video-background video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Dark overlay on video for better readability */
+.video-background::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
 }
 
 html, body, #root {
@@ -68,16 +63,13 @@ html, body, #root {
   z-index: 1;
 }
 
-.logo-circle {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 50px;
+.professional-logo {
+  display: inline-block;
   animation: pulse 3s ease-in-out infinite;
+}
+
+.professional-logo svg {
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
 }
 
 @keyframes pulse {
@@ -93,31 +85,76 @@ html, body, #root {
 .login-card {
   max-width: 500px;
   border-radius: 20px;
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: white;
 }
 
-/* Login button */
+/* Make text white on transparent card */
+.login-card .form-label,
+.login-card h2 {
+  color: white !important;
+}
+
+.login-card p,
+.login-card small {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Make inputs semi-transparent too */
+.login-card .form-control {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: white !important;
+}
+
+.login-card .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.login-card .form-control:focus {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Test credentials box */
+.login-card .test-credentials {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.login-card .test-credentials code {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+}
+
+/* Login button - white theme */
 .login-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  color: #454958 !important;
   font-weight: 600;
   transition: all 0.3s;
 }
 
 .login-button:hover {
+  background: rgba(255, 255, 255, 1) !important;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+  color: #282131 !important;
 }
 
-/* Register link */
+/* Register link - white theme */
 .register-link {
-  color: #667eea;
+  color: rgba(255, 255, 255, 0.9) !important;
   font-weight: 600;
   text-decoration: none;
 }
 
 .register-link:hover {
-  color: #764ba2;
+  color: white !important;
   text-decoration: underline;
 }
 
