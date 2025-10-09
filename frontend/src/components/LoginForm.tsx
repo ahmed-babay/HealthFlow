@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Form, Button, Alert } from 'react-bootstrap';
+import authService from '../services/authService';
 
 // This component handles just the login form
 function LoginForm() {
@@ -7,11 +9,33 @@ function LoginForm() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login:', { username, password });
-    alert('Login functionality coming soon!');
+    setError('');
+    setLoading(true);
+
+    try {
+      // Call login API
+      const response = await authService.login({ username, password });
+      console.log('Login successful:', response);
+      
+      // Redirect based on role
+      if (response.role === 'DOCTOR') {
+        navigate('/doctor-dashboard');
+      } else if (response.role === 'ADMIN') {
+        navigate('/admin-dashboard');
+      } else {
+        navigate('/patient-dashboard');
+      }
+    } catch (err: any) {
+      console.error('Login failed:', err);
+      setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
+      console.log('Login failed:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
