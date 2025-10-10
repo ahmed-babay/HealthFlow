@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { API_BASE_URLS } from '../config/apiConfig';
-import { LoginRequest, LoginResponse } from '../types/auth.types';
+import { LoginRequest, LoginResponse, RegisterRequest } from '../types/auth.types';
 
 // Authentication Service - handles all auth-related API calls
 const authService = {
@@ -19,6 +19,22 @@ const authService = {
     }
     else{
       throw new Error('Login failed');
+    }
+    
+    return response.data;
+  },
+
+  // Register new user
+  register: async (userData: RegisterRequest): Promise<LoginResponse> => {
+    const response = await axios.post<LoginResponse>(
+      `${API_BASE_URLS.AUTH}/auth/register`,
+      userData
+    );
+    
+    // Save JWT token to localStorage
+    if (response.data.token) {
+      localStorage.setItem('jwt_token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data));
     }
     
     return response.data;
