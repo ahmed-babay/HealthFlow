@@ -1,5 +1,6 @@
 import { Container } from 'react-bootstrap';
 import Navbar from '../components/Navbar';
+import WelcomeCard from '../components/WelcomeCard';
 
 // Patient Dashboard - Main page for patients
 function PatientDashboard() {
@@ -9,9 +10,11 @@ function PatientDashboard() {
       <Navbar />
       
       {/* Dashboard Content */}
-      <Container className="py-5">
-        <h1 className="text-white text-center">Patient Dashboard</h1>
-        <p className="text-white text-center">Welcome to your dashboard!</p>
+      <Container className="py-4">
+        {/* Welcome Card */}
+        <WelcomeCard />
+        
+        {/* More content will go here */}
       </Container>
     </>
   );
