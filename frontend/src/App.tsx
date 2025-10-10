@@ -1,15 +1,20 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import PatientDashboard from './pages/PatientDashboard';
 import VideoBackground from './components/VideoBackground';
 import './App.css';
 
-function App() {
+function AppContent() {
+  const location = useLocation();
+  
+  // Show video only on login and register pages
+  const showVideo = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/';
+  
   return (
-    <Router>
-      {/* Video background for entire app */}
-      <VideoBackground />
+    <>
+      {/* Video background only for login/register */}
+      {showVideo && <VideoBackground />}
       
       <div className="App">
         <Routes>
@@ -21,6 +26,14 @@ function App() {
           <Route path="/admin-dashboard" element={<h1>Admin Dashboard - Coming Soon</h1>} />
         </Routes>
       </div>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }
