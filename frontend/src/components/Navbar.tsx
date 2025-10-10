@@ -24,7 +24,6 @@ function Navbar() {
         {/* User info and logout */}
         <Nav className="ms-auto align-items-center">
           <span className="text-white me-3">
-            Welcome, {user?.firstName || user?.username}
           </span>
           <Button 
             variant="outline-light" 
