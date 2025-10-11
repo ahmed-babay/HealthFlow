@@ -1,10 +1,38 @@
+import { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Navbar from '../components/Navbar';
 import WelcomeCard from '../components/WelcomeCard';
 import StatsCard from '../components/StatsCard';
+import appointmentService from '../services/appointmentService';
+import authService from '../services/authService';
+import { Appointment } from '../types/appointment.types';
 
 // Patient Dashboard - Main page for patients
 function PatientDashboard() {
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Load appointments when component mounts
+  useEffect(() => {
+    loadAppointments();
+  }, []);
+
+  const loadAppointments = async () => {
+    try {
+      // Get user ID from logged-in user
+      const user = authService.getCurrentUser();
+      const userId = user?.id ? parseInt(user.id) : 1;
+      
+      const data = await appointmentService.getUpcomingAppointmentsByPatient(userId);
+      setAppointments(data);
+      console.log('Loaded appointments:', data);
+    } catch (error) {
+      console.error('Failed to load appointments:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       {/* Navigation Bar */}
@@ -21,8 +49,8 @@ function PatientDashboard() {
             <StatsCard 
               icon="📅" 
               title="Upcoming Appointments" 
-              value="3" 
-              subtitle="Next: Tomorrow at 10:00 AM"
+              value={loading ? '...' : appointments.length} 
+              subtitle={loading ? 'Loading...' : `${appointments.length} scheduled`}
             />
           </Col>
           <Col md={4}>
