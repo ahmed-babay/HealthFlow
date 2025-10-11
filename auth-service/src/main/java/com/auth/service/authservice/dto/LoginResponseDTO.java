@@ -2,6 +2,7 @@ package com.auth.service.authservice.dto;
 
 public class LoginResponseDTO {
 
+    private String id;
     private String token;
     private String username;
     private String email;
@@ -12,7 +13,8 @@ public class LoginResponseDTO {
     // Constructors
     public LoginResponseDTO() {}
 
-    public LoginResponseDTO(String token, String username, String email, String role, String firstName, String lastName) {
+    public LoginResponseDTO(String id, String token, String username, String email, String role, String firstName, String lastName) {
+        this.id = id;
         this.token = token;
         this.username = username;
         this.email = email;
@@ -22,6 +24,14 @@ public class LoginResponseDTO {
     }
 
     // Getters and Setters
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getToken() {
         return token;
     }
