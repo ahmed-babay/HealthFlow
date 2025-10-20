@@ -2,6 +2,9 @@
 
 A comprehensive healthcare management system built with Spring Boot microservices, featuring JWT authentication, role-based authorization, and service-to-service communication.
 
+## Screenshot
+![LoggingScreenshot](./logging_screenshot.png)
+
 ## 🏗️ Architecture Overview
 
 ### Microservices Structure
@@ -170,6 +173,7 @@ GET    /api/appointments/health       - Health check
 - **JWT (JJWT)** - Token-based authentication
 - **RestClient** - Service-to-service communication
 - **Maven** - Dependency management
+- **Redis** - Caching (optional, currently disabled)
 
 ### Security
 - **JWT (RS256)** - Asymmetric encryption
@@ -177,12 +181,22 @@ GET    /api/appointments/health       - Health check
 - **OAuth2 Resource Server** - JWT validation
 - **Role-Based Access Control** - Authorization
 
+## 📚 Documentation
+
+- **[Quick Start Guide](docs/quick-start.md)** - Get up and running in 5 minutes
+- **[API Documentation](docs/api-documentation.md)** - Complete API reference
+- **[Development Guide](docs/development-guide.md)** - Developer handbook
+- **[Architecture Diagrams](docs/architecture-diagram.md)** - System architecture
+- **[Configuration Guide](docs/configuration-guide.md)** - Enable/disable features
+- **[Project Summary](docs/project-summary.md)** - Project overview
+
 ## 🚀 Getting Started
 
 ### Prerequisites
 - Java 17+
 - Maven 3.6+
 - IDE (IntelliJ IDEA, Eclipse, VS Code)
+- Redis (Optional - currently disabled for testing)
 
 ### Running the Services
 
