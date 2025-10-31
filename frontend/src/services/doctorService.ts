@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { API_BASE_URLS } from '../config/apiConfig';
 import authService from './authService';
+import { Doctor } from '../types/doctor.types';
 
 // Add JWT token to requests
 const getAuthHeaders = () => ({
@@ -11,7 +12,7 @@ const getAuthHeaders = () => ({
 
 const doctorService = {
   // Get all doctors
-  getAllDoctors: async () => {
+  getAllDoctors: async (): Promise<Doctor[]> => {
     const response = await axios.get(
       `${API_BASE_URLS.DOCTOR}/api/v1/doctors`,
       getAuthHeaders()

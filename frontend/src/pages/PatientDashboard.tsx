@@ -4,30 +4,73 @@ import Navbar from '../components/Navbar';
 import WelcomeCard from '../components/WelcomeCard';
 import StatsCard from '../components/StatsCard';
 import appointmentService from '../services/appointmentService';
+import doctorService from '../services/doctorService';
+import patientService from '../services/patientService';
 import authService from '../services/authService';
 import { Appointment } from '../types/appointment.types';
+import { Doctor } from '../types/doctor.types';
+import { Patient } from '../types/patient.types';
 
-// Patient Dashboard - Main page for patients
 function PatientDashboard() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [patient, setPatient] = useState<Patient | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Load appointments when component mounts
   useEffect(() => {
-    loadAppointments();
+    loadDashboardData();
   }, []);
 
-  const loadAppointments = async () => {
+  const loadDashboardData = async () => {
     try {
-      // Get user ID from logged-in user
       const user = authService.getCurrentUser();
-      const userId = user?.id ? parseInt(user.id) : 1;
+      if (!user) {
+        console.error('❌ No user found in localStorage');
+        setLoading(false);
+        return;
+      }
+
+      console.log('🔄 Fetching patient data from backend...');
+      let currentPatient: Patient | null = null;
+      try {
+        currentPatient = await patientService.getPatientByEmail(user.email);
+        setPatient(currentPatient);
+        console.log('✅ Successfully loaded patient:', currentPatient);
+      } catch (error: any) {
+        console.error('❌ Failed to load patient:', error);
+        if (error.response?.status === 404) {
+          console.warn('⚠️ Patient record not found. User might need to create a patient profile.');
+        }
+      }
+
+      console.log('🔄 Fetching doctors from backend...');
+      try {
+        const doctorsData = await doctorService.getAllDoctors();
+        setDoctors(doctorsData);
+        console.log('✅ Successfully loaded doctors:', doctorsData);
+        console.log(`📊 Total doctors count: ${doctorsData.length}`);
+      } catch (error: any) {
+        console.error('❌ Failed to load doctors:', error);
+      }
       
-      const data = await appointmentService.getUpcomingAppointmentsByPatient(userId);
-      setAppointments(data);
-      console.log('Loaded appointments:', data);
-    } catch (error) {
-      console.error('Failed to load appointments:', error);
+      console.log('🔄 Fetching appointments from backend...');
+      try {
+        const patientIdForAppointments = currentPatient ? 1 : 1;
+        const appointmentsData = await appointmentService.getUpcomingAppointmentsByPatient(patientIdForAppointments);
+        setAppointments(appointmentsData);
+        console.log('✅ Successfully loaded appointments:', appointmentsData);
+        console.log(`📊 Total appointments count: ${appointmentsData.length}`);
+      } catch (error: any) {
+        console.error('❌ Failed to load appointments:', error);
+        if (error.response) {
+          console.error('Response status:', error.response.status);
+          console.error('Response data:', error.response.data);
+        }
+        setAppointments([]);
+      }
+      
+    } catch (error: any) {
+      console.error('❌ Failed to load dashboard data:', error);
     } finally {
       setLoading(false);
     }
@@ -35,15 +78,20 @@ function PatientDashboard() {
 
   return (
     <>
-      {/* Navigation Bar */}
       <Navbar />
       
-      {/* Dashboard Content */}
       <Container className="py-4">
-        {/* Welcome Card */}
+        {loading && (
+          <div className="text-center text-white mb-4">
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <p className="mt-2">Loading dashboard data...</p>
+          </div>
+        )}
+        
         <WelcomeCard />
         
-        {/* Stats Cards */}
         <Row className="g-4 mb-4">
           <Col md={4}>
             <StatsCard 
@@ -56,9 +104,9 @@ function PatientDashboard() {
           <Col md={4}>
             <StatsCard 
               icon="👨‍⚕️" 
-              title="My Doctors" 
-              value="2" 
-              subtitle="Dr. Smith, Dr. Johnson"
+              title="Available Doctors" 
+              value={loading ? '...' : doctors.length} 
+              subtitle={loading ? 'Loading...' : `${doctors.length} doctors available`}
             />
           </Col>
           <Col md={4}>
@@ -70,8 +118,6 @@ function PatientDashboard() {
             />
           </Col>
         </Row>
-        
-        {/* More content will go here */}
       </Container>
     </>
   );

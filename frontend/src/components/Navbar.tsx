@@ -17,8 +17,11 @@ function Navbar() {
     <BootstrapNavbar className="custom-navbar" expand="lg">
       <Container>
         {/* Logo/Brand */}
-        <BootstrapNavbar.Brand href="#" className="text-white fw-bold">
-           HealthFlow
+        <BootstrapNavbar.Brand href="#" className="d-flex flex-column">
+          <span className="text-white fw-bold">HealthFlow</span>
+          <small className="text-white-50" style={{ fontSize: '11px' }}>
+            User ID: {user?.id || 'N/A'}
+          </small>
         </BootstrapNavbar.Brand>
 
         {/* User info and logout */}
