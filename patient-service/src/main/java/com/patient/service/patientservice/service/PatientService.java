@@ -40,6 +40,13 @@ public class PatientService {
         return PatientMapper.toDTO(patient);
     }
 
+    @Cacheable(value = "patients", key = "'email-' + #email")
+    public PatientResponseDTO getPatientByEmail(String email) {
+        Patient patient = patientRepository.findByEmail(email)
+                .orElseThrow(() -> new PatientNotFoundException("Patient not found with email: " + email));
+        return PatientMapper.toDTO(patient);
+    }
+
     @CacheEvict(value = "patients", key = "'all-patients'")
     public PatientResponseDTO createPatient(PatientRequestDTO patientRequestDTO){
         if(patientRepository.existsByEmail(patientRequestDTO.getEmail())){
