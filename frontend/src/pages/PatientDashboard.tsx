@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import WelcomeCard from '../components/WelcomeCard';
 import StatsCard from '../components/StatsCard';
@@ -12,6 +13,7 @@ import { Doctor } from '../types/doctor.types';
 import { Patient } from '../types/patient.types';
 
 function PatientDashboard() {
+  const navigate = useNavigate();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [patient, setPatient] = useState<Patient | null>(null);
@@ -116,6 +118,45 @@ function PatientDashboard() {
               value="5" 
               subtitle="Last updated: 2 days ago"
             />
+          </Col>
+        </Row>
+
+        <Row className="g-4">
+          <Col md={4}>
+            <div className="d-grid">
+              <Button
+                variant="primary"
+                size="lg"
+                onClick={() => navigate('/edit-profile')}
+                className="py-3"
+              >
+                ✏️ Edit Personal Data
+              </Button>
+            </div>
+          </Col>
+          <Col md={4}>
+            <div className="d-grid">
+              <Button
+                variant="success"
+                size="lg"
+                onClick={() => navigate('/doctors')}
+                className="py-3"
+              >
+                👨‍⚕️ View Available Doctors
+              </Button>
+            </div>
+          </Col>
+          <Col md={4}>
+            <div className="d-grid">
+              <Button
+                variant="info"
+                size="lg"
+                onClick={() => navigate('/medical-records')}
+                className="py-3"
+              >
+                📋 View Medical Records
+              </Button>
+            </div>
           </Col>
         </Row>
       </Container>
