@@ -27,7 +27,7 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/patients/health", "/h2-console/**").permitAll()
-                .requestMatchers("/patients").hasAnyRole("DOCTOR", "ADMIN")
+                .requestMatchers("/patients").hasAnyRole("DOCTOR", "ADMIN", "PATIENT")
                 .requestMatchers("/patients/**").hasAnyRole("DOCTOR", "ADMIN", "PATIENT")
                 .requestMatchers("/medical-records/**").hasAnyRole("DOCTOR", "ADMIN", "PATIENT")
                 .requestMatchers("/allergies/**").hasAnyRole("DOCTOR", "ADMIN", "PATIENT")
