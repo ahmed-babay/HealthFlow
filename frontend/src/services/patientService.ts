@@ -27,7 +27,16 @@ const patientService = {
 
   getPatientByEmail: async (email: string) => {
     const response = await axios.get(
-      `${API_BASE_URLS.PATIENT}/patients/search/email?email=${encodeURIComponent(email)}`,
+      `${API_BASE_URLS.PATIENT}/patients/email?email=${encodeURIComponent(email)}`,
+      getAuthHeaders()
+    );
+    return response.data;
+  },
+
+  updatePatient: async (id: string, data: any) => {
+    const response = await axios.put(
+      `${API_BASE_URLS.PATIENT}/patients/${id}`,
+      data,
       getAuthHeaders()
     );
     return response.data;

@@ -47,15 +47,15 @@ public class PatientController {
         return ResponseEntity.ok().body(patients);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PatientResponseDTO> getPatientById(@PathVariable UUID id){
-        PatientResponseDTO patientResponseDTO = patientService.getPatientById(id);
+    @GetMapping("/email")
+    public ResponseEntity<PatientResponseDTO> getPatientByEmail(@RequestParam String email){
+        PatientResponseDTO patientResponseDTO = patientService.getPatientByEmail(email);
         return ResponseEntity.ok().body(patientResponseDTO);
     }
 
-    @GetMapping("/search/email")
-    public ResponseEntity<PatientResponseDTO> getPatientByEmail(@RequestParam String email){
-        PatientResponseDTO patientResponseDTO = patientService.getPatientByEmail(email);
+    @GetMapping("/{id}")
+    public ResponseEntity<PatientResponseDTO> getPatientById(@PathVariable UUID id){
+        PatientResponseDTO patientResponseDTO = patientService.getPatientById(id);
         return ResponseEntity.ok().body(patientResponseDTO);
     }
 
