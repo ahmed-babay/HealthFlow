@@ -26,11 +26,8 @@ public class SecurityConfig {
                 // Allow health check and H2 console without authentication
                 .requestMatchers("/api/v1/doctors/health", "/h2-console/**").permitAll()
                 
-                // DOCTOR endpoints - all authenticated users can view, only ADMIN can manage
-                .requestMatchers("GET", "/api/v1/doctors/**").hasAnyRole("PATIENT", "DOCTOR", "ADMIN")
-                .requestMatchers("POST", "/api/v1/doctors/**").hasRole("ADMIN")
-                .requestMatchers("PUT", "/api/v1/doctors/**").hasRole("ADMIN")
-                .requestMatchers("DELETE", "/api/v1/doctors/**").hasRole("ADMIN")
+                // DOCTOR endpoints - all authenticated users can view
+                .requestMatchers("/api/v1/doctors/**").authenticated()
                 
                 // All other requests require authentication
                 .anyRequest().authenticated()
