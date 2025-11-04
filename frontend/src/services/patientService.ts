@@ -33,6 +33,15 @@ const patientService = {
     return response.data;
   },
 
+  createPatient: async (data: any) => {
+    const response = await axios.post(
+      `${API_BASE_URLS.PATIENT}/patients`,
+      data,
+      getAuthHeaders()
+    );
+    return response.data;
+  },
+
   updatePatient: async (id: string, data: any) => {
     const response = await axios.put(
       `${API_BASE_URLS.PATIENT}/patients/${id}`,

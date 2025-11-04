@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Alert } from 'react-bootstrap';
 import authService from '../services/authService';
+import patientService from '../services/patientService';
 
 // Register form component
 function RegisterForm() {
@@ -51,6 +52,25 @@ function RegisterForm() {
       });
       
       console.log('Registration successful:', response);
+      
+      // Create corresponding Patient or Doctor record
+      try {
+        if (response.role === 'PATIENT') {
+          await patientService.createPatient({
+            name: `${formData.firstName} ${formData.lastName}`,
+            email: formData.email,
+            address: 'Not provided', 
+            dateOfBirth: '1990-01-01', 
+            registeredDate: new Date().toISOString().split('T')[0],
+          });
+          console.log('Patient record created');
+        } else if (response.role === 'DOCTOR') {
+          console.log('Doctor registration - doctor record creation pending');
+        }
+      } catch (profileError: any) {
+        console.warn('Failed to create profile record:', profileError);
+        // Continue anyway - user can create profile later
+      }
       
       // Redirect based on role
       if (response.role === 'DOCTOR') {
