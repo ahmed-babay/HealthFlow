@@ -2,6 +2,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import Login from './pages/Login';
 import Register from './pages/Register';
 import PatientDashboard from './pages/PatientDashboard';
+import EditProfile from './pages/EditProfile';
+import DoctorsList from './pages/DoctorsList';
+import MedicalRecords from './pages/MedicalRecords';
 import VideoBackground from './components/VideoBackground';
 import './App.css';
 
@@ -22,6 +25,9 @@ function AppContent() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/patient-dashboard" element={<PatientDashboard />} />
+          <Route path="/edit-profile" element={<EditProfile />} />
+          <Route path="/doctors" element={<DoctorsList />} />
+          <Route path="/medical-records" element={<MedicalRecords />} />
           <Route path="/doctor-dashboard" element={<h1>Doctor Dashboard - Coming Soon</h1>} />
           <Route path="/admin-dashboard" element={<h1>Admin Dashboard - Coming Soon</h1>} />
         </Routes>
