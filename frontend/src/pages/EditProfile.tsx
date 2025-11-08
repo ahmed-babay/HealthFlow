@@ -19,6 +19,7 @@ function EditProfile() {
     email: '',
     address: '',
     dateOfBirth: '',
+    registeredDate: '',
   });
 
   useEffect(() => {
@@ -40,6 +41,7 @@ function EditProfile() {
         email: patientData.email || '',
         address: patientData.address || '',
         dateOfBirth: patientData.dateOfBirth || '',
+        registeredDate: patientData.registeredDate || '',
       });
     } catch (error: any) {
       console.error('Failed to load patient data:', error);
