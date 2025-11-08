@@ -49,11 +49,12 @@ public class AuthService {
             loginRequest.getUsername()
         ).orElseThrow(() -> new RuntimeException("User not found"));
 
-        // 3. GENERATE JWT TOKEN
-        String token = jwtUtil.generateToken(user.getUsername(), user.getRole().name());
+        // 3. GENERATE JWT TOKEN (with user ID)
+        String token = jwtUtil.generateToken(user.getUsername(), user.getRole().name(), user.getId());
 
-        // 4. RETURN TOKEN AND USER INFO
+        // 4. RETURN TOKEN AND USER INFO (including user ID)
         return new LoginResponseDTO(
+            user.getId().toString(),
             token,
             user.getUsername(),
             user.getEmail(),
@@ -91,8 +92,8 @@ public class AuthService {
         // 3. SAVE USER
         User savedUser = userRepository.save(user);
 
-        // 4. GENERATE TOKEN FOR IMMEDIATE LOGIN
-        String token = jwtUtil.generateToken(savedUser.getUsername(), savedUser.getRole().name());
+        // 4. GENERATE TOKEN FOR IMMEDIATE LOGIN (with user ID)
+        String token = jwtUtil.generateToken(savedUser.getUsername(), savedUser.getRole().name(), savedUser.getId());
 
         // 5. RETURN SUCCESS RESPONSE
         return new RegisterResponseDTO(
