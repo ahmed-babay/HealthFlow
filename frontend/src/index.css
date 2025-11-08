@@ -163,8 +163,8 @@ html, body, #root {
 
 /* Test credentials */
 .test-credentials code {
-  background-color: rgba(102, 126, 234, 0.1);
-  color: #667eea;
+  background-color: rgba(148, 163, 184, 0.2);
+  color: #e2e8f0;
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 12px;
@@ -172,8 +172,8 @@ html, body, #root {
 
 /* Form input focus */
 .form-control:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.15);
+  border-color: #64748b;
+  box-shadow: 0 0 0 0.25rem rgba(100, 116, 139, 0.35);
 }
 
 /* ============================================
@@ -198,22 +198,59 @@ html, body, #root {
 
 /* When no video, show clean gradient */
 body:not(:has(.video-background)) {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1f2937 0%, #0f172a 100%);
 }
 
 /* Glass cards for dashboard */
 .glass-card {
-  background: rgba(255, 255, 255, 0.15) !important;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  background: rgba(30, 41, 59, 0.6) !important;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(148, 163, 184, 0.35) !important;
   border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.35);
 }
 
 .role-badge {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(148, 163, 184, 0.25);
   padding: 8px 16px;
   border-radius: 20px;
-  color: white;
+  color: #e2e8f0;
   font-weight: 600;
   font-size: 14px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #334155, #1f2937) !important;
+  border: 1px solid rgba(148, 163, 184, 0.4) !important;
+  color: #e2e8f0 !important;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.35);
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #1f2937, #111827) !important;
+  border-color: rgba(226, 232, 240, 0.5) !important;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #475569, #334155) !important;
+  border: 1px solid rgba(148, 163, 184, 0.35) !important;
+  color: #e2e8f0 !important;
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, #334155, #1e293b) !important;
+  border-color: rgba(226, 232, 240, 0.4) !important;
+}
+
+.btn-info {
+  background: linear-gradient(135deg, #1f2937, #111827) !important;
+  border: 1px solid rgba(148, 163, 184, 0.35) !important;
+  color: #e2e8f0 !important;
+}
+
+.btn-info:hover {
+  background: linear-gradient(135deg, #111827, #0b1120) !important;
+  border-color: rgba(226, 232, 240, 0.4) !important;
 }
