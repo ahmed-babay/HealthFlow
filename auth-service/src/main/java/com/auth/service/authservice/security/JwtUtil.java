@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.KeyFactory;
@@ -19,6 +21,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Component
@@ -54,18 +57,22 @@ public class JwtUtil {
 
     public PublicKey getPublicKey() {
         try {
-            ClassPathResource resource = new ClassPathResource(publicKeyPath.replace("classpath:", ""));
-            String keyContent = new String(Files.readAllBytes(Paths.get(resource.getURI())));
-            
-            // Remove PEM headers and whitespace
-            keyContent = keyContent.replace("-----BEGIN PUBLIC KEY-----", "")
-                                 .replace("-----END PUBLIC KEY-----", "")
-                                 .replaceAll("\\s", "");
-            
-            byte[] keyBytes = Base64.getDecoder().decode(keyContent);
-            X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            return keyFactory.generatePublic(spec);
+            String path = publicKeyPath.replace("classpath:", "");
+            ClassPathResource resource = new ClassPathResource(path);
+
+            try (InputStream is = resource.getInputStream()) {
+                String keyPem = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+
+                String keyContent = keyPem
+                        .replace("-----BEGIN PUBLIC KEY-----", "")
+                        .replace("-----END PUBLIC KEY-----", "")
+                        .replaceAll("\\s", "");
+
+                byte[] keyBytes = Base64.getDecoder().decode(keyContent);
+                X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
+                KeyFactory kf = KeyFactory.getInstance("RSA");
+                return kf.generatePublic(spec);
+            }
         } catch (Exception e) {
             throw new RuntimeException("Error loading public key from file", e);
         }
@@ -77,12 +84,21 @@ public class JwtUtil {
         claims.put("role", role); // Add user role to token
         return createToken(claims, username);
     }
+    
+    // GENERATE TOKEN WITH USER ID
+    public String generateToken(String username, String role, UUID userId) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", role);
+        claims.put("userId", userId);
+        return createToken(claims, username);
+    }
 
     // Helper method to create the actual token
     private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .claims(claims)                           // Custom data (role)
                 .subject(subject)                         // Username
+                .issuer("http://localhost:4002/auth")     // Issuer claim (REQUIRED for OAuth2 Resource Server)
                 .issuedAt(new Date(System.currentTimeMillis()))  // Token creation time
                 .expiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION)) // Expiration time
                 .signWith(getPrivateKey(), SignatureAlgorithm.RS256)  // Sign with private key using RSA
