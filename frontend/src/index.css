@@ -146,7 +146,7 @@ html, body, #root {
   background: rgba(255, 255, 255, 1) !important;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
-  color: #282131 !important;
+  color: #ffffff !important;
 }
 
 /* Register link - white theme */
