@@ -1,10 +1,6 @@
 # Healthcare Management System - Microservices Architecture
 
-A comprehensive healthcare management system built with Spring Boot microservices, featuring JWT authentication, role-based authorization, and service-to-service communication.
-
-## Screenshot
-![LoggingScreenshot](./logging_screenshot.png)
-![patientScreenshot](./screenshot_patient_dashboard.png)
+A comprehensive healthcare management system built with Spring Boot microservices, featuring JWT authentication, role-based authorization, and service-to-service communication. Screenshots are down below !
 
 ## 🏗️ Architecture Overview
 
@@ -31,6 +27,13 @@ A comprehensive healthcare management system built with Spring Boot microservice
                     │ • Validation     │
                     └─────────────────┘
 ```
+
+## Screenshot
+![LoggingScreenshot](./screenshots/login.png)
+![RegisterScreenshot](./screenshots/register.png)
+![PatientDashboardScreenshot](./screenshots/dashboard_patient.png)
+![DoctorsScreenshot](./screenshots/doctos_list.png)
+![EditProfileScreenshot](./screenshots/edit_profile.png)
 
 ## 🔐 Authentication & Authorization Flow
 
