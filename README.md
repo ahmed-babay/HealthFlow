@@ -28,7 +28,7 @@ A comprehensive healthcare management system built with Spring Boot microservice
                     └─────────────────┘
 ```
 
-## Screenshot
+## Screenshots
 ![LoggingScreenshot](./screenshots/login.png)
 ![RegisterScreenshot](./screenshots/register.png)
 ![PatientDashboardScreenshot](./screenshots/dashboard_patient.png)
